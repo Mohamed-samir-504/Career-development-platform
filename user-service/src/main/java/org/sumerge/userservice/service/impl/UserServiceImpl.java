@@ -12,6 +12,8 @@ import org.sumerge.userservice.service.UserService;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +21,17 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    @Override
+    public List<UserResponse> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (User user : users) {
+
+            userResponses.add(mapToDto(user));
+        }
+        return userResponses;
+    }
 
     @Override
     public UserResponse createUser(CreateUserRequest request) {
