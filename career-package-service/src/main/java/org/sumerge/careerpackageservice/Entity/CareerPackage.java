@@ -14,7 +14,6 @@ public class CareerPackage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
     private String title;
     private LocalDate submissionDate;
 
