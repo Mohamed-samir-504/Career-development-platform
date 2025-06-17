@@ -1,33 +1,33 @@
 
 package org.sumerge.careerpackageservice.Controller;
 
-import org.sumerge.careerpackageservice.Entity.CareerPackage;
-import org.sumerge.careerpackageservice.Service.CareerPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
+import org.sumerge.careerpackageservice.Service.UserCareerPackageService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/career-packages")
-public class CareerPackageController {
+@RequestMapping("/api/user-career-packages")
+public class UserCareerPackageController {
 
     @Autowired
-    private CareerPackageService service;
+    private UserCareerPackageService service;
 
     @GetMapping
-    public List<CareerPackage> getAll() {
+    public List<UserCareerPackage> getAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<CareerPackage> getById(@PathVariable Long id) {
+    public Optional<UserCareerPackage> getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public CareerPackage create(@RequestBody CareerPackage careerPackage) {
+    public UserCareerPackage create(@RequestBody UserCareerPackage careerPackage) {
         return service.save(careerPackage);
     }
 

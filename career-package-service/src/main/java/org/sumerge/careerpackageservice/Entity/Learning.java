@@ -6,12 +6,11 @@ import java.time.LocalDate;
 
 @Entity
 public class Learning {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private PackageSection section;
+    private UserPackageSection section;
 
     private String topic;
     private String provider;

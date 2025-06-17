@@ -9,12 +9,11 @@ import java.time.LocalDate;
 
 @Entity
 public class Contribution {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private PackageSection section;
+    private UserPackageSection section;
 
     @Enumerated(EnumType.STRING)
     private ContributionType type;
@@ -22,8 +21,6 @@ public class Contribution {
     private String topic;
     private String proofUrl;
     private LocalDate date;
-
-    @Column(columnDefinition = "TEXT")
     private String notes;
 
 }

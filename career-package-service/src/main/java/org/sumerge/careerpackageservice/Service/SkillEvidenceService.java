@@ -1,7 +1,6 @@
 
 package org.sumerge.careerpackageservice.Service;
 
-import org.sumerge.careerpackageservice.Entity.Learning;
 import org.sumerge.careerpackageservice.Entity.SkillEvidence;
 import org.sumerge.careerpackageservice.Repository.SkillEvidenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;

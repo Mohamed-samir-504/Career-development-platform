@@ -1,23 +1,22 @@
 
 package org.sumerge.careerpackageservice.Entity;
 
-
-import jakarta.persistence.*;
 import org.sumerge.careerpackageservice.Enums.SectionType;
+import jakarta.persistence.*;
 
 @Entity
-public class PackageSection {
+public class PackageSectionTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private CareerPackage careerPackage;
+    private String title;
 
     @Enumerated(EnumType.STRING)
     private SectionType type;
 
     private int orderIndex;
-    private String title;
 
+    @ManyToOne
+    private CareerPackageTemplate template;
 }

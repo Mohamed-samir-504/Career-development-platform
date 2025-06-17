@@ -1,29 +1,29 @@
 
 package org.sumerge.careerpackageservice.Service;
 
-import org.sumerge.careerpackageservice.Entity.CareerPackage;
-import org.sumerge.careerpackageservice.Repository.CareerPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
+import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CareerPackageService {
+public class UserCareerPackageService {
 
     @Autowired
-    private CareerPackageRepository repository;
+    private UserCareerPackageRepository repository;
 
-    public List<CareerPackage> getAll() {
+    public List<UserCareerPackage> getAll() {
         return repository.findAll();
     }
 
-    public Optional<CareerPackage> getById(Long id) {
+    public Optional<UserCareerPackage> getById(Long id) {
         return repository.findById(id);
     }
 
-    public CareerPackage save(CareerPackage careerPackage) {
+    public UserCareerPackage save(UserCareerPackage careerPackage) {
         return repository.save(careerPackage);
     }
 

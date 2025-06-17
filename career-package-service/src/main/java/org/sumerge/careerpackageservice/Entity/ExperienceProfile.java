@@ -6,12 +6,11 @@ import java.time.LocalDate;
 
 @Entity
 public class ExperienceProfile {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     @OneToOne
-    private PackageSection section;
+    private UserPackageSection section;
 
     private String projectTitle;
     private String clientName;
@@ -21,14 +20,8 @@ public class ExperienceProfile {
 
     @Column(columnDefinition = "TEXT")
     private String roleSummary;
-
-    @Column(columnDefinition = "TEXT")
     private String solution;
-
-    @Column(columnDefinition = "TEXT")
     private String outcome;
-
-    @Column(columnDefinition = "TEXT")
     private String lessonsLearned;
 
 }

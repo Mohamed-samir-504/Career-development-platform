@@ -1,28 +1,29 @@
 
 package org.sumerge.careerpackageservice.Entity;
 
-
-import jakarta.persistence.*;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class CareerPackage {
+public class UserCareerPackage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private Long userId;
+    private Long reviewerId;
+
+    private LocalDate startDate;
     private LocalDate submissionDate;
 
     @Enumerated(EnumType.STRING)
     private PackageStatus status;
 
-    private Long reviewedById;
+    @ManyToOne
+    private CareerPackageTemplate template;
 
-    @OneToMany(mappedBy = "careerPackage", cascade = CascadeType.ALL)
-    private List<PackageSection> sections;
-
+    @OneToMany(mappedBy = "userCareerPackage", cascade = CascadeType.ALL)
+    private List<UserPackageSection> userSections;
 }

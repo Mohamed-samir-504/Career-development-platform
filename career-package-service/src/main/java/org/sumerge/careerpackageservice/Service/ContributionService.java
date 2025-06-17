@@ -1,7 +1,6 @@
 
 package org.sumerge.careerpackageservice.Service;
 
-import org.sumerge.careerpackageservice.Entity.CareerPackage;
 import org.sumerge.careerpackageservice.Entity.Contribution;
 import org.sumerge.careerpackageservice.Repository.ContributionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
