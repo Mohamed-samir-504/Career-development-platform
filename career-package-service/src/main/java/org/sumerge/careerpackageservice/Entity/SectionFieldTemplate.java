@@ -12,7 +12,6 @@ public class SectionFieldTemplate {
     private String fieldKey;
     private String fieldType;
     private boolean required;
-    private int orderIndex;
 
     @ManyToOne
     private SectionTemplate sectionTemplate;

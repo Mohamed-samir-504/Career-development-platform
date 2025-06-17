@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/career-package")
+@RequestMapping("/api/career-package-template")
 public class CareerPackageTemplateController {
 
     @Autowired

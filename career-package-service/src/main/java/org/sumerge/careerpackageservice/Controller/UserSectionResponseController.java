@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/usersection")
+@RequestMapping("/api/user-section-response")
 public class UserSectionResponseController {
 
     @Autowired

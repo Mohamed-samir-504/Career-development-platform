@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/section-field")
+@RequestMapping("/api/section-field-template")
 public class SectionFieldTemplateController {
 
     @Autowired

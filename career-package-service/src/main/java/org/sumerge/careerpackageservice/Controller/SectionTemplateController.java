@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/section")
+@RequestMapping("/api/section-template")
 public class SectionTemplateController {
 
     @Autowired
