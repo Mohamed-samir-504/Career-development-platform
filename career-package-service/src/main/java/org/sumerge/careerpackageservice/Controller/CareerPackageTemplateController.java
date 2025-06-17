@@ -10,29 +10,35 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/career-packages")
+@RequestMapping("/api/career-package")
 public class CareerPackageTemplateController {
 
     @Autowired
-    private CareerPackageTemplateService service;
+    private CareerPackageTemplateService careerPackageTemplateService;
 
     @GetMapping
     public List<CareerPackageTemplate> getAll() {
-        return service.getAll();
+        return careerPackageTemplateService.getAll();
     }
 
     @GetMapping("/{id}")
     public Optional<CareerPackageTemplate> getById(@PathVariable Long id) {
-        return service.getById(id);
+        return careerPackageTemplateService.getById(id);
     }
 
     @PostMapping
-    public CareerPackageTemplate create(@RequestBody CareerPackageTemplate careerPackage) {
-        return service.save(careerPackage);
+    public CareerPackageTemplate create(@RequestBody CareerPackageTemplate obj) {
+        return careerPackageTemplateService.create(obj);
+    }
+
+    @PutMapping
+    public CareerPackageTemplate update(@RequestBody CareerPackageTemplate obj) {
+        return careerPackageTemplateService.create(obj);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        service.delete(id);
+        careerPackageTemplateService.delete(id);
     }
+
 }

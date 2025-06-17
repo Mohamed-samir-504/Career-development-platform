@@ -2,20 +2,17 @@
 package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 public class CareerPackageTemplate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     private String title;
     private String version;
     private String description;
-    private LocalDate createdDate;
 
-    @OneToMany(mappedBy = "template", cascade = CascadeType.ALL)
-    private List<PackageSectionTemplate> sections;
+    @OneToMany(mappedBy = "careerPackageTemplate", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SectionTemplate> sections;
 }

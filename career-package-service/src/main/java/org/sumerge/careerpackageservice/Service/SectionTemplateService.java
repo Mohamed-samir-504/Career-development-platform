@@ -1,8 +1,8 @@
 
 package org.sumerge.careerpackageservice.Service;
 
-import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
-import org.sumerge.careerpackageservice.Repository.CareerPackageTemplateRepository;
+import org.sumerge.careerpackageservice.Entity.SectionTemplate;
+import org.sumerge.careerpackageservice.Repository.SectionTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,20 +10,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CareerPackageTemplateService {
+public class SectionTemplateService {
 
     @Autowired
-    private CareerPackageTemplateRepository repository;
+    private SectionTemplateRepository repository;
 
-    public List<CareerPackageTemplate> getAll() {
+    public List<SectionTemplate> getAll() {
         return repository.findAll();
     }
 
-    public Optional<CareerPackageTemplate> getById(Long id) {
+    public Optional<SectionTemplate> getById(Long id) {
         return repository.findById(id);
     }
 
-    public CareerPackageTemplate create(CareerPackageTemplate obj) {
+    public SectionTemplate create(SectionTemplate obj) {
         return repository.save(obj);
     }
 
@@ -31,7 +31,7 @@ public class CareerPackageTemplateService {
         repository.deleteById(id);
     }
 
-//    public List<CareerPackageTemplate> getByTitle(String value) {
+//    public List<SectionTemplate> getByTitle(String value) {
 //        return repository.findAll().stream()
 //                .filter(obj -> obj.getTitle().equalsIgnoreCase(value))
 //                .toList();
