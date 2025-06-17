@@ -2,6 +2,7 @@ package org.sumerge.userservice.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.sumerge.userservice.dto.CreateUserRequest;
 import org.sumerge.userservice.dto.UpdateUserRequest;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .role(User.Role.USER)
+                .role(User.Role.EMPLOYEE)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -68,6 +69,12 @@ public class UserServiceImpl implements UserService {
 
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
+        return mapToDto(user);
+    }
+
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return mapToDto(user);
     }
 
