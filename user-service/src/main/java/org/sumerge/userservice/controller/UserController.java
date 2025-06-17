@@ -3,6 +3,7 @@ package org.sumerge.userservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.sumerge.userservice.dto.CreateUserRequest;
 import org.sumerge.userservice.dto.UpdateUserRequest;
@@ -33,6 +34,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/by-token")
+    public ResponseEntity<UserResponse> getUserByToken() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
     @PutMapping("/{id}")

@@ -50,8 +50,8 @@ public class User {
     }
 
     public enum Role {
-        USER,
-        REVIEWER,
+        EMPLOYEE,
+        MANAGER,
         ADMIN
     }
 }
