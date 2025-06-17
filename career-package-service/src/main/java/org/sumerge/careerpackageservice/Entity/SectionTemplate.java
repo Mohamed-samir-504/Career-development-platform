@@ -2,10 +2,12 @@
 package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.sumerge.careerpackageservice.Enums.SectionType;
 
 import java.util.List;
 
+@Data
 @Entity
 public class SectionTemplate {
     @Id @GeneratedValue

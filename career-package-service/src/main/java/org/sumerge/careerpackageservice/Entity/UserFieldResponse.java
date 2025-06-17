@@ -2,7 +2,9 @@
 package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class UserFieldResponse {
     @Id @GeneratedValue

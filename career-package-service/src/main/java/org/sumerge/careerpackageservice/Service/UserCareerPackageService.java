@@ -31,4 +31,8 @@ public class UserCareerPackageService {
         repository.deleteById(id);
     }
 
+    public UserCareerPackage getByUserId(Long userId) {
+        return repository.findByUserId(userId);
+    }
+
 }
