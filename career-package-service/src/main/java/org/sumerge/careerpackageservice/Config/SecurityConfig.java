@@ -26,7 +26,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user-career-package/**").permitAll()
                         .anyRequest().permitAll() // all other endpoints require auth
                 );
-                //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
