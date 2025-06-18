@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.sumerge.shared"})
+@ComponentScan(basePackages = {"org.sumerge.shared","org.sumerge.careerpackageservice"})
 public class CareerPackageServiceApplication {
 
     public static void main(String[] args) {
