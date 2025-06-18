@@ -11,7 +11,8 @@ import java.util.List;
 @Data
 @Entity
 public class UserCareerPackage {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private UUID userId;

@@ -10,7 +10,8 @@ import java.util.List;
 @Data
 @Entity
 public class UserSectionResponse {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne

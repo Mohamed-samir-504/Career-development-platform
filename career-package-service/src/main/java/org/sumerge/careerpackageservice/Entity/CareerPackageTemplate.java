@@ -10,7 +10,8 @@ import java.util.UUID;
 @Data
 @Entity
 public class CareerPackageTemplate {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String title;

@@ -8,7 +8,8 @@ import java.util.UUID;
 @Data
 @Entity
 public class UserFieldResponse {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne

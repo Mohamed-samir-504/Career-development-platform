@@ -11,7 +11,8 @@ import java.util.List;
 @Data
 @Entity
 public class SectionTemplate {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String title;
