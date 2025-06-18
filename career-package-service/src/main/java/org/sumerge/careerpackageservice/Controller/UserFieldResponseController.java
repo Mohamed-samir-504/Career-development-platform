@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user-field-response")
@@ -22,7 +23,7 @@ public class UserFieldResponseController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserFieldResponse> getById(@PathVariable Long id) {
+    public Optional<UserFieldResponse> getById(@PathVariable UUID id) {
         return userFieldResponseService.getById(id);
     }
 
@@ -37,7 +38,7 @@ public class UserFieldResponseController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         userFieldResponseService.delete(id);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/section-template")
@@ -22,7 +23,7 @@ public class SectionTemplateController {
     }
 
     @GetMapping("/{id}")
-    public Optional<SectionTemplate> getById(@PathVariable Long id) {
+    public Optional<SectionTemplate> getById(@PathVariable UUID id) {
         return sectionTemplateService.getById(id);
     }
 
@@ -37,7 +38,7 @@ public class SectionTemplateController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         sectionTemplateService.delete(id);
     }
 
