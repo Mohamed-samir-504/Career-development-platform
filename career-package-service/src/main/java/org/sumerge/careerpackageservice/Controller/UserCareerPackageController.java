@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,12 +28,12 @@ public class UserCareerPackageController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserCareerPackage> getById(@PathVariable Long id) {
+    public Optional<UserCareerPackage> getById(@PathVariable UUID id) {
         return userCareerPackageService.getById(id);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserCareerPackageDTO> getUserCareerPackage(@PathVariable Long userId) {
+    public ResponseEntity<UserCareerPackageDTO> getUserCareerPackage(@PathVariable UUID userId) {
         UserCareerPackage entity = userCareerPackageService.getByUserId(userId);
         if (entity == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(mapper.toDto(entity));
@@ -50,7 +51,7 @@ public class UserCareerPackageController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         userCareerPackageService.delete(id);
     }
 

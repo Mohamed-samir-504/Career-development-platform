@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user-section-response")
@@ -22,7 +23,7 @@ public class UserSectionResponseController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserSectionResponse> getById(@PathVariable Long id) {
+    public Optional<UserSectionResponse> getById(@PathVariable UUID id) {
         return userSectionResponseService.getById(id);
     }
 
@@ -37,7 +38,7 @@ public class UserSectionResponseController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         userSectionResponseService.delete(id);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserFieldResponseService {
@@ -19,7 +20,7 @@ public class UserFieldResponseService {
         return repository.findAll();
     }
 
-    public Optional<UserFieldResponse> getById(Long id) {
+    public Optional<UserFieldResponse> getById(UUID id) {
         return repository.findById(id);
     }
 
@@ -27,7 +28,7 @@ public class UserFieldResponseService {
         return repository.save(obj);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         repository.deleteById(id);
     }
 }

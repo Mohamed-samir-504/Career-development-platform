@@ -3,6 +3,7 @@ package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.UUID;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 public class UserSectionResponse {
     @Id @GeneratedValue
-    private Long id;
+    private UUID id;
 
     @ManyToOne
     private UserCareerPackage userCareerPackage;

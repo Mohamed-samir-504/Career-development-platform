@@ -4,6 +4,7 @@ package org.sumerge.careerpackageservice.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
+import java.util.UUID;
 
 import java.util.List;
 
@@ -11,10 +12,10 @@ import java.util.List;
 @Entity
 public class UserCareerPackage {
     @Id @GeneratedValue
-    private Long id;
+    private UUID id;
 
-    private Long userId;
-    private Long reviewerId;
+    private UUID userId;
+    private UUID reviewerId;
 
     @Enumerated(EnumType.STRING)
     private PackageStatus status;

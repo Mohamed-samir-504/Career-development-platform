@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CareerPackageTemplateService {
@@ -19,7 +20,7 @@ public class CareerPackageTemplateService {
         return repository.findAll();
     }
 
-    public Optional<CareerPackageTemplate> getById(Long id) {
+    public Optional<CareerPackageTemplate> getById(UUID id) {
         return repository.findById(id);
     }
 
@@ -27,7 +28,7 @@ public class CareerPackageTemplateService {
         return repository.save(obj);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         repository.deleteById(id);
     }
 

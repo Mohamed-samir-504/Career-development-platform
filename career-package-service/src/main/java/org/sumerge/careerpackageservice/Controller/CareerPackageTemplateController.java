@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/career-package-template")
@@ -22,7 +23,7 @@ public class CareerPackageTemplateController {
     }
 
     @GetMapping("/{id}")
-    public Optional<CareerPackageTemplate> getById(@PathVariable Long id) {
+    public Optional<CareerPackageTemplate> getById(@PathVariable UUID id) {
         return careerPackageTemplateService.getById(id);
     }
 
@@ -37,7 +38,7 @@ public class CareerPackageTemplateController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         careerPackageTemplateService.delete(id);
     }
 

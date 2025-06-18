@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
 public class CareerPackageTemplate {
     @Id @GeneratedValue
-    private Long id;
+    private UUID id;
 
     private String title;
     private String version;
