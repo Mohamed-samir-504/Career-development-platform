@@ -2,6 +2,7 @@
 package org.sumerge.careerpackageservice.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
@@ -20,6 +21,7 @@ public class UserCareerPackageController {
 
 
     private final UserCareerPackageService userCareerPackageService;
+
     private final UserCareerPackageMapper mapper;
 
     @GetMapping
@@ -32,9 +34,9 @@ public class UserCareerPackageController {
         return userCareerPackageService.getById(id);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<UserCareerPackageDTO> getUserCareerPackage(@PathVariable UUID userId) {
-        UserCareerPackage entity = userCareerPackageService.getByUserId(userId);
+        UserCareerPackage entity = userCareerPackageService.getFullyLoadedPackageByUserId(userId);
         if (entity == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(mapper.toDto(entity));
     }
