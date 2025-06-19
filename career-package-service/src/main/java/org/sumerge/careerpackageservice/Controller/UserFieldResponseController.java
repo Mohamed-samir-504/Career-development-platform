@@ -1,6 +1,8 @@
 
 package org.sumerge.careerpackageservice.Controller;
 
+import org.springframework.http.ResponseEntity;
+import org.sumerge.careerpackageservice.Dto.Request.SubmitFieldResponseRequest;
 import org.sumerge.careerpackageservice.Entity.UserFieldResponse;
 import org.sumerge.careerpackageservice.Service.UserFieldResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +29,28 @@ public class UserFieldResponseController {
         return userFieldResponseService.getById(id);
     }
 
-    @PostMapping
-    public UserFieldResponse create(@RequestBody UserFieldResponse obj) {
-        return userFieldResponseService.create(obj);
-    }
+//    @PostMapping
+//    public UserFieldResponse create(@RequestBody UserFieldResponse obj) {
+//        return userFieldResponseService.create(obj);
+//    }
 
-    @PutMapping
-    public UserFieldResponse update(@RequestBody UserFieldResponse obj) {
-        return userFieldResponseService.create(obj);
-    }
+//    @PutMapping
+//    public UserFieldResponse update(@RequestBody UserFieldResponse obj) {
+//        return userFieldResponseService.create(obj);
+//    }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         userFieldResponseService.delete(id);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserFieldResponse> submit(@RequestBody SubmitFieldResponseRequest request) {
+        return ResponseEntity.ok(userFieldResponseService.submitField(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserFieldResponse> update(@PathVariable UUID id, @RequestBody SubmitFieldResponseRequest request) {
+        return ResponseEntity.ok(userFieldResponseService.updateField(id, request.getValue()));
     }
 }

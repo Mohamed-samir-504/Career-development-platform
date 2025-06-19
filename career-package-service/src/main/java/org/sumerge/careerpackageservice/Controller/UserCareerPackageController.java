@@ -57,4 +57,13 @@ public class UserCareerPackageController {
         userCareerPackageService.delete(id);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserCareerPackage> updateStatus(
+            @PathVariable UUID id,
+            @RequestBody UserCareerPackage request
+    ) {
+        return ResponseEntity.ok(userCareerPackageService.updateStatus(id, request.getStatus()));
+    }
+
+
 }

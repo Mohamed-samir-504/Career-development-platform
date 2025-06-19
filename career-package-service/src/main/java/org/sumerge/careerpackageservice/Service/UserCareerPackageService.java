@@ -2,7 +2,9 @@
 package org.sumerge.careerpackageservice.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.sumerge.careerpackageservice.Dto.Request.SubmitCareerPackageRequest;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
+import org.sumerge.careerpackageservice.Enums.PackageStatus;
 import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +53,14 @@ public class UserCareerPackageService {
 
         return pkg;
     }
+
+    public UserCareerPackage updateStatus(UUID id, PackageStatus status) {
+        UserCareerPackage pkg = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Career package not found"));
+
+        pkg.setStatus(PackageStatus.valueOf(String.valueOf(status)));
+        return repository.save(pkg);
+    }
+
 
 }
