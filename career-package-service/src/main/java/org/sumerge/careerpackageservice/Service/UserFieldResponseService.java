@@ -1,10 +1,15 @@
 
 package org.sumerge.careerpackageservice.Service;
 
+import org.sumerge.careerpackageservice.Dto.Request.SubmitFieldResponseRequest;
+import org.sumerge.careerpackageservice.Entity.SectionFieldTemplate;
 import org.sumerge.careerpackageservice.Entity.UserFieldResponse;
+import org.sumerge.careerpackageservice.Entity.UserSectionResponse;
+import org.sumerge.careerpackageservice.Repository.SectionFieldTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.UserFieldResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.sumerge.careerpackageservice.Repository.UserSectionResponseRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,22 +18,52 @@ import java.util.UUID;
 @Service
 public class UserFieldResponseService {
 
-    @Autowired
-    private UserFieldResponseRepository repository;
+
+    private final UserSectionResponseRepository sectionResponseRepo;
+    private final SectionFieldTemplateRepository fieldTemplateRepo;
+    private final UserFieldResponseRepository fieldResponseRepo;
+
+    public UserFieldResponseService(UserSectionResponseRepository sectionResponseRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserFieldResponseRepository fieldResponseRepo) {
+        this.sectionResponseRepo = sectionResponseRepo;
+        this.fieldTemplateRepo = fieldTemplateRepo;
+        this.fieldResponseRepo = fieldResponseRepo;
+    }
 
     public List<UserFieldResponse> getAll() {
-        return repository.findAll();
+        return fieldResponseRepo.findAll();
     }
 
     public Optional<UserFieldResponse> getById(UUID id) {
-        return repository.findById(id);
+        return fieldResponseRepo.findById(id);
     }
 
     public UserFieldResponse create(UserFieldResponse obj) {
-        return repository.save(obj);
+        return fieldResponseRepo.save(obj);
     }
 
     public void delete(UUID id) {
-        repository.deleteById(id);
+        fieldResponseRepo.deleteById(id);
+    }
+
+    public UserFieldResponse submitField(SubmitFieldResponseRequest request) {
+        UserSectionResponse sectionResponse = sectionResponseRepo.findById(request.getSectionResponseId())
+                .orElseThrow(() -> new RuntimeException("Section response not found"));
+
+        SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(request.getFieldTemplateId())
+                .orElseThrow(() -> new RuntimeException("Field template not found"));
+
+        UserFieldResponse response = new UserFieldResponse();
+        response.setSectionResponse(sectionResponse);
+        response.setFieldTemplate(fieldTemplate);
+        response.setValue(request.getValue());
+
+        return fieldResponseRepo.save(response);
+    }
+
+    public UserFieldResponse updateField(UUID id, String value) {
+        UserFieldResponse response = fieldResponseRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Field response not found"));
+        response.setValue(value);
+        return fieldResponseRepo.save(response);
     }
 }

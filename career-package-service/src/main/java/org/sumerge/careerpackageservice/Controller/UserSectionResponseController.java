@@ -1,6 +1,8 @@
 
 package org.sumerge.careerpackageservice.Controller;
 
+import org.springframework.http.ResponseEntity;
+import org.sumerge.careerpackageservice.Dto.Request.SubmitSectionResponseRequest;
 import org.sumerge.careerpackageservice.Entity.UserSectionResponse;
 import org.sumerge.careerpackageservice.Service.UserSectionResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,10 @@ public class UserSectionResponseController {
         return userSectionResponseService.getById(id);
     }
 
-    @PostMapping
-    public UserSectionResponse create(@RequestBody UserSectionResponse obj) {
-        return userSectionResponseService.create(obj);
-    }
+//    @PostMapping
+//    public UserSectionResponse create(@RequestBody UserSectionResponse obj) {
+//        return userSectionResponseService.create(obj);
+//    }
 
     @PutMapping
     public UserSectionResponse update(@RequestBody UserSectionResponse obj) {
@@ -40,5 +42,15 @@ public class UserSectionResponseController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         userSectionResponseService.delete(id);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserSectionResponse> submit(@RequestBody SubmitSectionResponseRequest request) {
+        return ResponseEntity.ok(userSectionResponseService.submitSection(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserSectionResponse> update(@PathVariable UUID id, @RequestBody SubmitSectionResponseRequest request) {
+        return ResponseEntity.ok(userSectionResponseService.updateSection(id, request));
     }
 }
