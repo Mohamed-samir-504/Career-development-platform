@@ -16,17 +16,15 @@ import org.sumerge.careerpackageservice.Filter.JwtAuthenticationFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) // disable CSRF for Postman testing
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user-career-package/**").permitAll()
-                        .anyRequest().permitAll() // all other endpoints require auth
-                );
-        //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest().authenticated())
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
