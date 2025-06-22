@@ -2,6 +2,7 @@ package org.sumerge.userservice.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.sumerge.userservice.dto.CreateUserRequest;
@@ -88,5 +89,20 @@ public class UserServiceImpl implements UserService {
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
+    }
+
+    @KafkaListener(topics = "user-create", groupId = "user-group")
+    public void consume(CreateUserRequest request) {
+        System.out.println("📥 Received from Kafka: " + request.getEmail());
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .role(User.Role.EMPLOYEE)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        userRepository.save(user);
     }
 }
