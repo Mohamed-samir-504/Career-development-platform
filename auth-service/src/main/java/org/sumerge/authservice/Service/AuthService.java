@@ -1,5 +1,6 @@
 package org.sumerge.authservice.Service;
 
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.sumerge.authservice.Client.UserServiceClient;
@@ -13,16 +14,18 @@ import org.sumerge.shared.utils.JwtUtil;
 public class AuthService {
 
     private final UserAccountRepository userAccountRepository;
-    private final UserServiceClient userServiceClient;
+    //private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final KafkaTemplate<String, CreateUserRequest> kafkaTemplate;
 
     AuthService(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder,
-                JwtUtil jwtUtil, UserServiceClient userServiceClient) {
+                JwtUtil jwtUtil, UserServiceClient userServiceClient, KafkaTemplate<String, CreateUserRequest> kafkaTemplate) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
-        this.userServiceClient = userServiceClient;
+        //this.userServiceClient = userServiceClient;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public SignupResponse signup(SignupRequest request) {
@@ -42,12 +45,10 @@ public class AuthService {
                 user.getId(),request.getName(),user.getEmail(),token);
 
         try {
-            userServiceClient.createUser(userRequest);
-
+            kafkaTemplate.send("user-create", userRequest);
         } catch (Exception e) {
-
-            userAccountRepository.deleteById(user.getId());
-            throw new RuntimeException("Failed to create user in UserService: " + e.getMessage(), e);
+            userAccountRepository.deleteById(user.getId()); // rollback user account
+            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
         }
 
         return new SignupResponse(user.getId(),user.getEmail(), token);
