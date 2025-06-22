@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
             user.setManager(userRepository.findById(request.getManagerId())
                     .orElseThrow(() -> new EntityNotFoundException("Manager not found")));
         }
+        if (request.getRole() != null) user.setRole(request.getRole());
 
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
