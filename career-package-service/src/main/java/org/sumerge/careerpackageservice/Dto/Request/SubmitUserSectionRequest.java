@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class SubmitSectionResponseRequest {
+public class SubmitUserSectionRequest {
     private UUID userCareerPackageId;
     private UUID sectionTemplateId;
     private List<UserFieldResponseDTO> fieldResponses;

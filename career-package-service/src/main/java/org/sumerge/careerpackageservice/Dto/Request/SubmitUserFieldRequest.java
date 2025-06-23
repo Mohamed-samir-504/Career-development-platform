@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class SubmitFieldResponseRequest {
+public class SubmitUserFieldRequest {
     private UUID sectionResponseId;
     private UUID fieldTemplateId;
     private String value;

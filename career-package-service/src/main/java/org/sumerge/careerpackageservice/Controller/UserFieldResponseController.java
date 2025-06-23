@@ -2,7 +2,7 @@
 package org.sumerge.careerpackageservice.Controller;
 
 import org.springframework.http.ResponseEntity;
-import org.sumerge.careerpackageservice.Dto.Request.SubmitFieldResponseRequest;
+import org.sumerge.careerpackageservice.Dto.Request.SubmitUserFieldRequest;
 import org.sumerge.careerpackageservice.Entity.UserFieldResponse;
 import org.sumerge.careerpackageservice.Service.UserFieldResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +45,12 @@ public class UserFieldResponseController {
     }
 
     @PostMapping
-    public ResponseEntity<UserFieldResponse> submit(@RequestBody SubmitFieldResponseRequest request) {
+    public ResponseEntity<UserFieldResponse> submit(@RequestBody SubmitUserFieldRequest request) {
         return ResponseEntity.ok(userFieldResponseService.submitField(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserFieldResponse> update(@PathVariable UUID id, @RequestBody SubmitFieldResponseRequest request) {
+    public ResponseEntity<UserFieldResponse> update(@PathVariable UUID id, @RequestBody SubmitUserFieldRequest request) {
         return ResponseEntity.ok(userFieldResponseService.updateField(id, request.getValue()));
     }
 }

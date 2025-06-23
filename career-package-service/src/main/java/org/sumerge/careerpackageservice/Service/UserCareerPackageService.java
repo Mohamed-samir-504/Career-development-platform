@@ -2,7 +2,6 @@
 package org.sumerge.careerpackageservice.Service;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.sumerge.careerpackageservice.Dto.Request.SubmitCareerPackageRequest;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
 import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;

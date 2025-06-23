@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class SubmitCareerPackageRequest {
+public class SubmitUserCareerPackageRequest {
     private UUID id;
     private String status;
-    private List<SubmitSectionResponseRequest> sectionResponses;
+    private List<SubmitUserSectionRequest> sectionResponses;
 }

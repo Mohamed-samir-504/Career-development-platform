@@ -1,13 +1,12 @@
 
 package org.sumerge.careerpackageservice.Service;
 
-import org.sumerge.careerpackageservice.Dto.Request.SubmitFieldResponseRequest;
+import org.sumerge.careerpackageservice.Dto.Request.SubmitUserFieldRequest;
 import org.sumerge.careerpackageservice.Entity.SectionFieldTemplate;
 import org.sumerge.careerpackageservice.Entity.UserFieldResponse;
 import org.sumerge.careerpackageservice.Entity.UserSectionResponse;
 import org.sumerge.careerpackageservice.Repository.SectionFieldTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.UserFieldResponseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.sumerge.careerpackageservice.Repository.UserSectionResponseRepository;
 
@@ -45,7 +44,7 @@ public class UserFieldResponseService {
         fieldResponseRepo.deleteById(id);
     }
 
-    public UserFieldResponse submitField(SubmitFieldResponseRequest request) {
+    public UserFieldResponse submitField(SubmitUserFieldRequest request) {
         UserSectionResponse sectionResponse = sectionResponseRepo.findById(request.getSectionResponseId())
                 .orElseThrow(() -> new RuntimeException("Section response not found"));
 
