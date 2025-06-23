@@ -3,6 +3,9 @@ package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.UUID;
 
 import java.util.List;
@@ -18,6 +21,8 @@ public class UserSectionResponse {
     private UserCareerPackage userCareerPackage;
 
     @ManyToOne
+    @JoinColumn(name = "section_template_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private SectionTemplate sectionTemplate;
 
     @OneToMany(mappedBy = "sectionResponse", cascade = CascadeType.ALL, orphanRemoval = true)

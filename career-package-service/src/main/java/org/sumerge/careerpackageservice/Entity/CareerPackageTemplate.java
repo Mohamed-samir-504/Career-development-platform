@@ -18,6 +18,7 @@ public class CareerPackageTemplate {
     private String version;
     private String description;
 
-    @OneToMany(mappedBy = "careerPackageTemplate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "career_package_template_id") // FK in SectionTemplate
     private List<SectionTemplate> sections;
 }
