@@ -3,10 +3,10 @@ package org.sumerge.careerpackageservice.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.sumerge.careerpackageservice.Dto.CareerPackageTemplateDTO;
+import org.sumerge.careerpackageservice.Dto.Request.CareerPackageEditRequest;
 import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Service.CareerPackageTemplateService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +51,15 @@ public class CareerPackageTemplateController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         careerPackageTemplateService.delete(id);
+    }
+
+    @PatchMapping("/{id}/sync")
+    public ResponseEntity<?> syncChanges(
+            @PathVariable UUID id,
+            @RequestBody CareerPackageEditRequest request) {
+
+        careerPackageTemplateService.syncChanges(id, request);
+        return ResponseEntity.ok().build();
     }
 
 }

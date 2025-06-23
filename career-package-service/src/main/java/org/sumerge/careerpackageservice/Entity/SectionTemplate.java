@@ -10,8 +10,10 @@ import java.util.List;
 
 @Data
 @Entity
+
 public class SectionTemplate {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String title;
@@ -24,9 +26,9 @@ public class SectionTemplate {
     @Column(columnDefinition = "TEXT")
     private String requirements;
 
-    @ManyToOne
-    private CareerPackageTemplate careerPackageTemplate;
 
-    @OneToMany(mappedBy = "sectionTemplate", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "section_template_id") // FK in SectionFieldTemplate
     private List<SectionFieldTemplate> fields;
 }

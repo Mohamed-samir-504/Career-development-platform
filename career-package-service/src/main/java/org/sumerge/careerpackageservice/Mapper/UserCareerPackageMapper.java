@@ -27,6 +27,7 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "instructions", target = "instructions")
     @Mapping(source = "requirements", target = "requirements")
     @Mapping(source = "fields", target = "fields")
+
     SectionTemplateDTO toDto(SectionTemplate section);
 
     @Mapping(source = "id", target = "id")
@@ -54,4 +55,22 @@ public interface UserCareerPackageMapper {
     List<UserSectionResponseDTO> toSectionResponseDtoList(List<UserSectionResponse> responses);
 
     List<UserFieldResponseDTO> toFieldResponseDtoList(List<UserFieldResponse> responses);
+
+
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "type", target = "type")
+    @Mapping(source = "instructions", target = "instructions")
+    @Mapping(source = "requirements", target = "requirements")
+    @Mapping(source = "fields", target = "fields")
+    SectionTemplate toEntity(SectionTemplateDTO section);
+
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "label", target = "label")
+    @Mapping(source = "fieldKey", target = "fieldKey")
+    @Mapping(source = "fieldType", target = "fieldType")
+    @Mapping(source = "required", target = "required")
+    SectionFieldTemplate toEntity(SectionFieldTemplateDTO field);
 }

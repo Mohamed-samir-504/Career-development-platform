@@ -10,13 +10,15 @@ import java.util.UUID;
 @Data
 @Entity
 public class CareerPackageTemplate {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String title;
     private String version;
     private String description;
 
-    @OneToMany(mappedBy = "careerPackageTemplate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "career_package_template_id") // FK in SectionTemplate
     private List<SectionTemplate> sections;
 }
