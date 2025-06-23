@@ -1,10 +1,9 @@
 
 package org.sumerge.careerpackageservice.Service;
 
-import org.sumerge.careerpackageservice.Dto.Request.SubmitSectionResponseRequest;
+import org.sumerge.careerpackageservice.Dto.Request.SubmitUserSectionRequest;
 import org.sumerge.careerpackageservice.Entity.*;
 import org.sumerge.careerpackageservice.Repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class UserSectionResponseService {
         sectionResponseRepo.deleteById(id);
     }
 
-    public UserSectionResponse submitSection(SubmitSectionResponseRequest request) {
+    public UserSectionResponse submitSection(SubmitUserSectionRequest request) {
         UserCareerPackage pkg = careerPackageRepo.findById(request.getUserCareerPackageId())
                 .orElseThrow(() -> new RuntimeException("Career package not found"));
 
@@ -70,7 +69,7 @@ public class UserSectionResponseService {
         return sectionResponseRepo.save(sectionResponse);
     }
 
-    public UserSectionResponse updateSection(UUID id, SubmitSectionResponseRequest request) {
+    public UserSectionResponse updateSection(UUID id, SubmitUserSectionRequest request) {
         UserSectionResponse sectionResponse = sectionResponseRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Section response not found"));
 

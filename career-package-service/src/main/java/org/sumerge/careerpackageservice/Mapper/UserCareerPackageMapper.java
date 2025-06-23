@@ -45,6 +45,8 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "value", target = "value")
     UserFieldResponseDTO toDto(UserFieldResponse response);
 
+    List<CareerPackageTemplateDTO> toCareerPackageDtoList(List<CareerPackageTemplate> templates);
+
     List<SectionTemplateDTO> toSectionDtoList(List<SectionTemplate> sections);
 
     List<SectionFieldTemplateDTO> toFieldDtoList(List<SectionFieldTemplate> fields);
