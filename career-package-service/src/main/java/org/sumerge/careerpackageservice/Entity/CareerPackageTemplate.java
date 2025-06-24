@@ -15,7 +15,6 @@ public class CareerPackageTemplate {
     private UUID id;
 
     private String title;
-    private String version;
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
