@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.sumerge.learningservice.dto.submission.LearningSubmissionDTO;
-import org.sumerge.learningservice.entity.LearningSubmission;
 import org.sumerge.learningservice.service.LearningSubmissionService;
 
 import java.util.List;
@@ -36,5 +35,11 @@ public class LearningSubmissionController {
     @GetMapping("/{id}")
     public ResponseEntity<LearningSubmissionDTO> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(submissionService.getSubmission(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        submissionService.deleteSubmission(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -22,7 +22,7 @@ public class LearningSectionTemplate {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private SectionType type; // e.g., TEXT, FILE_UPLOAD, VIDEO, etc.
+    private SectionType type;
 
     @Column(columnDefinition = "TEXT")
     private String instructions;
@@ -32,11 +32,10 @@ public class LearningSectionTemplate {
 
     private boolean requiresSubmission;
 
+    private String attachmentId; //reference to mongodb attachments
+
     @ManyToOne
     @JoinColumn(name = "learning_material_template_id")
     private LearningMaterialTemplate learningMaterialTemplate;
-
-    @OneToMany(mappedBy = "sectionTemplate", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LearningFieldTemplate> fields;
 }
 

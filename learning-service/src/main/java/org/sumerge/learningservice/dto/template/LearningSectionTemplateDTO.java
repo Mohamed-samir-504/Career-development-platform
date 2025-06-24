@@ -17,5 +17,5 @@ public class LearningSectionTemplateDTO {
     private String instructions;
     private String content;
     private boolean requiresSubmission;
-    private List<LearningFieldTemplateDTO> fields;
+    private String attachmentId;
 }

@@ -27,6 +27,9 @@ public class LearningSectionResponse {
     @JoinColumn(name = "section_template_id")
     private LearningSectionTemplate sectionTemplate;
 
-    @OneToMany(mappedBy = "sectionResponse", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LearningFieldResponse> fieldResponses;
+
+    @Column(columnDefinition = "TEXT")
+    private String userInput;
+
+    private String documentId;
 }

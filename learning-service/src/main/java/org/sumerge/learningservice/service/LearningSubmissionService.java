@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.sumerge.learningservice.dto.submission.LearningSubmissionDTO;
 import org.sumerge.learningservice.entity.LearningMaterialTemplate;
 import org.sumerge.learningservice.entity.LearningSectionResponse;
-import org.sumerge.learningservice.entity.LearningFieldResponse;
 import org.sumerge.learningservice.entity.LearningSubmission;
 import org.sumerge.learningservice.mapper.LearningMaterialMapper;
 import org.sumerge.learningservice.repository.LearningMaterialTemplateRepository;
@@ -33,22 +32,16 @@ public class LearningSubmissionService {
     public LearningSubmissionDTO saveSubmission(LearningSubmissionDTO submissionDto) {
         LearningSubmission entity = mapper.toEntity(submissionDto);
 
-        // Load the full template object
         UUID templateId = submissionDto.getTemplateId();
         LearningMaterialTemplate template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new RuntimeException("Template not found"));
 
         entity.setTemplate(template);
 
-        // Set back-references to parent submission
         if (entity.getSectionResponses() != null) {
             for (LearningSectionResponse section : entity.getSectionResponses()) {
                 section.setLearningSubmission(entity); // Important backref
-                if (section.getFieldResponses() != null) {
-                    for (LearningFieldResponse field : section.getFieldResponses()) {
-                        field.setSectionResponse(section); // Important backref
-                    }
-                }
+
             }
         }
 
