@@ -58,17 +58,17 @@ public class CareerPackageTemplateService {
         if (request.getDescription() != null) pkg.setDescription(request.getDescription());
 
         // === 2. Delete Sections ===
-        if (request.getDeletedSectionIds() != null) {
+        if (!request.getDeletedSectionIds().isEmpty()) {
             request.getDeletedSectionIds().forEach(sectionTemplateService::delete);
         }
 
         // === 3. Delete Fields ===
-        if (request.getDeletedFieldIds() != null) {
+        if (!request.getDeletedFieldIds().isEmpty()) {
             request.getDeletedFieldIds().forEach(sectionFieldTemplateService::delete);
         }
 
         // === 4. Update Existing Sections ===
-        if (request.getUpdatedSections() != null) {
+        if (!request.getUpdatedSections().isEmpty()) {
             for (SectionTemplateDTO dto : request.getUpdatedSections()) {
                 SectionTemplate section = sectionTemplateService.getById(dto.getId())
                         .orElseThrow(() -> new RuntimeException("Section not found"));
@@ -83,7 +83,7 @@ public class CareerPackageTemplateService {
         }
 
         // === 5. Update Existing Fields ===
-        if (request.getUpdatedFields() != null) {
+        if (!request.getUpdatedFields().isEmpty()) {
             for (SectionFieldTemplateDTO dto : request.getUpdatedFields()) {
                 SectionFieldTemplate field = sectionFieldTemplateService.getById(dto.getId())
                         .orElseThrow(() -> new RuntimeException("Field not found"));
@@ -98,7 +98,7 @@ public class CareerPackageTemplateService {
         }
 
         // === 6. Add New Sections ===
-        if (request.getNewSections() != null) {
+        if (!request.getNewSections().isEmpty()) {
             for (SectionTemplateDTO dto : request.getNewSections()) {
                 SectionTemplate section = mapper.toEntity(dto);
                 pkg.getSections().add(section);
@@ -108,14 +108,17 @@ public class CareerPackageTemplateService {
         }
 
         // === 7. Add New Fields ===
-        if (request.getNewFields() != null) {
+        if (!request.getNewFields().isEmpty()) {
             for (SectionFieldTemplateDTO dto : request.getNewFields()) {
-                SectionTemplate section = sectionTemplateService.getById(dto.getSectionTemplateId())
-                        .orElseThrow(() -> new RuntimeException("Section not found for field"));
+                if(dto.getSectionTemplateId()!= null){
+                    SectionTemplate section = sectionTemplateService.getById(dto.getSectionTemplateId())
+                            .orElseThrow(() -> new RuntimeException("Section not found for field"));
 
-                SectionFieldTemplate field = mapper.toEntity(dto);
-                section.getFields().add(field);
-                sectionTemplateService.create(section);
+                    SectionFieldTemplate field = mapper.toEntity(dto);
+                    section.getFields().add(field);
+                    sectionTemplateService.create(section);
+                }
+
             }
         }
 
