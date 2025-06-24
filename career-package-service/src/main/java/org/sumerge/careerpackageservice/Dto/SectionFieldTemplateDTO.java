@@ -10,4 +10,5 @@ public class SectionFieldTemplateDTO {
     private String fieldKey;
     private String fieldType;
     private boolean required;
+    private UUID sectionTemplateId;
 }

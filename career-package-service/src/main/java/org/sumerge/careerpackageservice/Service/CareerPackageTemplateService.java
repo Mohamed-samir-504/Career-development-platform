@@ -20,8 +20,6 @@ import java.util.UUID;
 @Service
 public class CareerPackageTemplateService {
 
-
-
     private final SectionTemplateService sectionTemplateService;
     private final SectionFieldTemplateService sectionFieldTemplateService;
 
@@ -64,7 +62,12 @@ public class CareerPackageTemplateService {
             request.getDeletedSectionIds().forEach(sectionTemplateService::delete);
         }
 
-        // === 3. Update Existing Sections ===
+        // === 3. Delete Fields ===
+        if (request.getDeletedFieldIds() != null) {
+            request.getDeletedFieldIds().forEach(sectionFieldTemplateService::delete);
+        }
+
+        // === 4. Update Existing Sections ===
         if (request.getUpdatedSections() != null) {
             for (SectionTemplateDTO dto : request.getUpdatedSections()) {
                 SectionTemplate section = sectionTemplateService.getById(dto.getId())
@@ -75,27 +78,50 @@ public class CareerPackageTemplateService {
                 section.setInstructions(dto.getInstructions());
                 section.setRequirements(dto.getRequirements());
 
-                // Clear old fields and replace with new
-                section.getFields().clear();
-                for (SectionFieldTemplateDTO fieldDto : dto.getFields()) {
-                    SectionFieldTemplate field = mapper.toEntity(fieldDto);
-                    section.getFields().add(field);
-                }
-
-                sectionTemplateService.create(section); // save updates
+                sectionTemplateService.create(section); // save update
             }
         }
 
-        // === 4. Add New Sections ===
+        // === 5. Update Existing Fields ===
+        if (request.getUpdatedFields() != null) {
+            for (SectionFieldTemplateDTO dto : request.getUpdatedFields()) {
+                SectionFieldTemplate field = sectionFieldTemplateService.getById(dto.getId())
+                        .orElseThrow(() -> new RuntimeException("Field not found"));
+
+                field.setLabel(dto.getLabel());
+                field.setFieldKey(dto.getFieldKey());
+                field.setFieldType(dto.getFieldType());
+                field.setRequired(dto.isRequired());
+
+                sectionFieldTemplateService.create(field);
+            }
+        }
+
+        // === 6. Add New Sections ===
         if (request.getNewSections() != null) {
             for (SectionTemplateDTO dto : request.getNewSections()) {
                 SectionTemplate section = mapper.toEntity(dto);
                 pkg.getSections().add(section);
+                sectionTemplateService.create(section);
+
             }
         }
 
-        // === 5. Save Entire Package ===
+        // === 7. Add New Fields ===
+        if (request.getNewFields() != null) {
+            for (SectionFieldTemplateDTO dto : request.getNewFields()) {
+                SectionTemplate section = sectionTemplateService.getById(dto.getSectionTemplateId())
+                        .orElseThrow(() -> new RuntimeException("Section not found for field"));
+
+                SectionFieldTemplate field = mapper.toEntity(dto);
+                section.getFields().add(field);
+                sectionTemplateService.create(section);
+            }
+        }
+
+        // === 8. Save Package ===
         careerPackageTemplateRepository.save(pkg);
     }
+
 
 }
