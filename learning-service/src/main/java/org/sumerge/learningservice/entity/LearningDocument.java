@@ -1,5 +1,7 @@
 package org.sumerge.learningservice.entity;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,4 +21,9 @@ public class LearningDocument {
 
     private String fieldKey;
     private String userId;
+
+    @Enumerated(EnumType.STRING)
+    private DocumentCategory category;
+
 }
+

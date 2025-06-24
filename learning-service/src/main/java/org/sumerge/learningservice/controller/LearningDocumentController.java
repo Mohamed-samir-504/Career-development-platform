@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.sumerge.learningservice.entity.LearningDocument;
+import org.sumerge.learningservice.entity.DocumentCategory;
 import org.sumerge.learningservice.service.LearningDocumentService;
 
 import java.io.IOException;
@@ -17,10 +18,33 @@ public class LearningDocumentController {
     private final LearningDocumentService documentService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file,
-                                         @RequestParam String userId,
-                                         @RequestParam String fieldKey) throws IOException {
-        String id = documentService.uploadFile(file, userId, fieldKey);
+    public ResponseEntity<String> upload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam String userId,
+            @RequestParam String fieldKey,
+            @RequestParam DocumentCategory category) throws IOException {
+
+        String id = documentService.uploadFile(file, userId, fieldKey, category);
+        return ResponseEntity.ok(id);
+    }
+
+    @PostMapping("/upload/template")
+    public ResponseEntity<String> uploadTemplateFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam String userId,
+            @RequestParam String fieldKey) throws IOException {
+
+        String id = documentService.uploadFile(file, userId, fieldKey, DocumentCategory.TEMPLATE_ATTACHMENT);
+        return ResponseEntity.ok(id);
+    }
+
+    @PostMapping("/upload/submission")
+    public ResponseEntity<String> uploadSubmissionFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam String userId,
+            @RequestParam String fieldKey) throws IOException {
+
+        String id = documentService.uploadFile(file, userId, fieldKey, DocumentCategory.SUBMISSION);
         return ResponseEntity.ok(id);
     }
 
@@ -33,4 +57,3 @@ public class LearningDocumentController {
                 .body(doc.getContent());
     }
 }
-
