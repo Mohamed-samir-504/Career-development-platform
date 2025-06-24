@@ -10,6 +10,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class LearningSectionResponseDTO {
+    private UUID id;
     private UUID sectionTemplateId;
-    private List<LearningFieldResponseDTO> fieldResponses;
+    private String userInput;
+    private String documentId;
 }
