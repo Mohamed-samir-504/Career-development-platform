@@ -1,9 +1,8 @@
 package org.sumerge.learningservice.dto.template;
 
 import lombok.*;
-import org.sumerge.learningservice.entity.SectionType;
+import org.sumerge.learningservice.enums.SectionType;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data

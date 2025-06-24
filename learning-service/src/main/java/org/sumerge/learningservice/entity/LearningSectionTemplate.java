@@ -2,8 +2,8 @@ package org.sumerge.learningservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.sumerge.learningservice.enums.SectionType;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
