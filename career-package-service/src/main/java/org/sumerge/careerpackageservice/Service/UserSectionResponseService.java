@@ -18,14 +18,14 @@ public class UserSectionResponseService {
     private final SectionTemplateRepository sectionTemplateRepo;
     private final SectionFieldTemplateRepository fieldTemplateRepo;
     private final UserSectionResponseRepository sectionResponseRepo;
-    private final UserFieldResponseRepository fieldResponseRepo;
 
-    public UserSectionResponseService(UserCareerPackageRepository careerPackageRepo, SectionTemplateRepository sectionTemplateRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserSectionResponseRepository sectionResponseRepo, UserFieldResponseRepository fieldResponseRepo) {
+
+    public UserSectionResponseService(UserCareerPackageRepository careerPackageRepo, SectionTemplateRepository sectionTemplateRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserSectionResponseRepository sectionResponseRepo) {
         this.careerPackageRepo = careerPackageRepo;
         this.sectionTemplateRepo = sectionTemplateRepo;
         this.fieldTemplateRepo = fieldTemplateRepo;
         this.sectionResponseRepo = sectionResponseRepo;
-        this.fieldResponseRepo = fieldResponseRepo;
+
     }
 
     public List<UserSectionResponse> getAll() {
