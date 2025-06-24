@@ -1,10 +1,10 @@
 package org.sumerge.learningservice.service;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.sumerge.learningservice.entity.LearningDocument;
+import org.sumerge.learningservice.entity.DocumentCategory;
 import org.sumerge.learningservice.repository.LearningDocumentRepository;
 
 import java.io.IOException;
@@ -15,13 +15,14 @@ public class LearningDocumentService {
 
     private final LearningDocumentRepository documentRepository;
 
-    public String uploadFile(MultipartFile file, String userId, String fieldKey) throws IOException {
+    public String uploadFile(MultipartFile file, String userId, String fieldKey, DocumentCategory category) throws IOException {
         LearningDocument doc = LearningDocument.builder()
                 .fileName(file.getOriginalFilename())
                 .contentType(file.getContentType())
                 .content(file.getBytes())
                 .userId(userId)
                 .fieldKey(fieldKey)
+                .category(category)
                 .build();
 
         return documentRepository.save(doc).getId();
