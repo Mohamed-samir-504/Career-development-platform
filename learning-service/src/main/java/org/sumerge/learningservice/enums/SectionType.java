@@ -1,4 +1,4 @@
-package org.sumerge.learningservice.entity;
+package org.sumerge.learningservice.enums;
 
 public enum SectionType {
     ARTICLE,
