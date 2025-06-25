@@ -3,7 +3,6 @@ package org.sumerge.authservice.Service;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.sumerge.authservice.Client.UserServiceClient;
 import org.sumerge.authservice.Model.DTO.*;
 import org.sumerge.authservice.Model.UserAccount;
 import org.sumerge.authservice.Repository.UserAccountRepository;
@@ -14,17 +13,15 @@ import org.sumerge.shared.utils.JwtUtil;
 public class AuthService {
 
     private final UserAccountRepository userAccountRepository;
-    //private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final KafkaTemplate<String, CreateUserRequest> kafkaTemplate;
 
     AuthService(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder,
-                JwtUtil jwtUtil, UserServiceClient userServiceClient, KafkaTemplate<String, CreateUserRequest> kafkaTemplate) {
+                JwtUtil jwtUtil, KafkaTemplate<String, CreateUserRequest> kafkaTemplate) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
-        //this.userServiceClient = userServiceClient;
         this.kafkaTemplate = kafkaTemplate;
     }
 

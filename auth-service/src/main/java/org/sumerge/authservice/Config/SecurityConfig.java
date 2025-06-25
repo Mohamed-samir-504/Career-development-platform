@@ -1,4 +1,4 @@
-package org.sumerge.authservice.Security;
+package org.sumerge.authservice.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
