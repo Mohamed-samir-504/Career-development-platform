@@ -1,4 +1,5 @@
-package org.sumerge.authservice.Common;
+package org.sumerge.shared.common;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
