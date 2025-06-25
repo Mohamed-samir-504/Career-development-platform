@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.security.Key;
 
+
 @Component
 public class JwtUtil {
 
@@ -17,7 +18,7 @@ public class JwtUtil {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private long expiration;
+    private Long expiration;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
