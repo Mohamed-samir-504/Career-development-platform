@@ -15,4 +15,5 @@ public interface UserService {
     UserResponse updateUser(UUID id, UpdateUserRequest request);
     List<UserResponse>getAllUsers();
     UserResponse getUserByEmail(String email);
+    List<UserResponse> getUsersByManagerId(UUID managerId);
 }

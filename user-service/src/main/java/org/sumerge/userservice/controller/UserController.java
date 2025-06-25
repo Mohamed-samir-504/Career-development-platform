@@ -42,6 +42,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
+    @GetMapping("/by-manager/{managerId}")
+    public ResponseEntity<List<UserResponse>> getUsersByManager(@PathVariable UUID managerId) {
+        return ResponseEntity.ok(userService.getUsersByManagerId(managerId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable UUID id,
