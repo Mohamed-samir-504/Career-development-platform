@@ -80,6 +80,16 @@ public class UserServiceImpl implements UserService {
         return mapToDto(user);
     }
 
+    @Override
+    public List<UserResponse> getUsersByManagerId(UUID managerId) {
+        List<User> users = userRepository.findByManager_Id(managerId);
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (User user : users) {
+            userResponses.add(mapToDto(user));
+        }
+        return userResponses;
+    }
+
     private UserResponse mapToDto(User user) {
         return UserResponse.builder()
                 .id(user.getId())
