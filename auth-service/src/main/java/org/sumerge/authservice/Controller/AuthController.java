@@ -2,12 +2,12 @@ package org.sumerge.authservice.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.sumerge.authservice.Common.ApiResponse;
 import org.sumerge.authservice.Model.DTO.LoginRequest;
 import org.sumerge.authservice.Model.DTO.LoginResponse;
 import org.sumerge.authservice.Model.DTO.SignupRequest;
 import org.sumerge.authservice.Model.DTO.SignupResponse;
 import org.sumerge.authservice.Service.AuthService;
+import org.sumerge.shared.common.ApiResponse;
 
 
 @RestController
