@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableFeignClients
-@ComponentScan(basePackages = {"org.sumerge.authservice", "org.sumerge.shared"})
+@ComponentScan(basePackages = {"org.sumerge.authservice", "org.sumerge.shared.utils","org.sumerge.shared.common"})
 public class AuthServiceApplication {
 
     public static void main(String[] args) {
