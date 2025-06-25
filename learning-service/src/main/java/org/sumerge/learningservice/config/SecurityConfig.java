@@ -1,7 +1,7 @@
 package org.sumerge.learningservice.config;
 
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.sumerge.shared.utils.JwtAuthenticationFilter;
+import org.sumerge.shared.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

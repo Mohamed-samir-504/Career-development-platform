@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/learning/scores")
-
 @CrossOrigin
 public class LearningScoreController {
 
