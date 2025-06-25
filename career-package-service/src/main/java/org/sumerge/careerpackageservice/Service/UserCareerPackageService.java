@@ -1,11 +1,16 @@
 
 package org.sumerge.careerpackageservice.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import org.sumerge.careerpackageservice.Dto.Request.AssignCareerPackageRequest;
+import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
+import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
+import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
+import org.sumerge.careerpackageservice.Repository.CareerPackageTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,28 +20,36 @@ import java.util.UUID;
 @Service
 public class UserCareerPackageService {
 
-    @Autowired
-    private UserCareerPackageRepository repository;
+
+    private final UserCareerPackageRepository userCareerPackageRepository;
+    private final CareerPackageTemplateRepository templateRepository;
+    private final UserCareerPackageMapper mapper;
+
+    public UserCareerPackageService(UserCareerPackageRepository userCareerPackageRepository, CareerPackageTemplateRepository templateRepository, UserCareerPackageMapper mapper) {
+        this.userCareerPackageRepository = userCareerPackageRepository;
+        this.templateRepository = templateRepository;
+        this.mapper = mapper;
+    }
 
     public List<UserCareerPackage> getAll() {
-        return repository.findAll();
+        return userCareerPackageRepository.findAll();
     }
 
     public Optional<UserCareerPackage> getById(UUID id) {
-        return repository.findById(id);
+        return userCareerPackageRepository.findById(id);
     }
 
     public UserCareerPackage create(UserCareerPackage obj) {
-        return repository.save(obj);
+        return userCareerPackageRepository.save(obj);
     }
 
     public void delete(UUID id) {
-        repository.deleteById(id);
+        userCareerPackageRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     public UserCareerPackage getFullyLoadedPackageByUserId(UUID userId) {
-        UserCareerPackage pkg = repository.findByUserId(userId);
+        UserCareerPackage pkg = userCareerPackageRepository.findByUserId(userId);
 
         if (pkg == null) return null;
 
@@ -54,11 +67,25 @@ public class UserCareerPackageService {
     }
 
     public UserCareerPackage updateStatus(UUID id, PackageStatus status) {
-        UserCareerPackage pkg = repository.findById(id)
+        UserCareerPackage pkg = userCareerPackageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Career package not found"));
 
         pkg.setStatus(PackageStatus.valueOf(String.valueOf(status)));
-        return repository.save(pkg);
+        return userCareerPackageRepository.save(pkg);
+    }
+
+    public UserCareerPackageDTO assignPackage(AssignCareerPackageRequest request) {
+        CareerPackageTemplate template = templateRepository.findById(request.getTemplateId())
+                .orElseThrow(() -> new EntityNotFoundException("Template not found"));
+
+        UserCareerPackage pkg = new UserCareerPackage();
+        pkg.setUserId(request.getUserId());
+        pkg.setReviewerId(request.getReviewerId());
+        pkg.setStatus(request.getStatus());
+        pkg.setTemplate(template);
+
+        userCareerPackageRepository.save(pkg);
+        return mapper.toDto(pkg);
     }
 
 

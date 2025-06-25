@@ -2,8 +2,8 @@
 package org.sumerge.careerpackageservice.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.sumerge.careerpackageservice.Dto.Request.AssignCareerPackageRequest;
 import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
@@ -42,9 +42,9 @@ public class UserCareerPackageController {
     }
 
 
-    @PostMapping
-    public UserCareerPackage create(@RequestBody UserCareerPackage obj) {
-        return userCareerPackageService.create(obj);
+    @PostMapping("/assign")
+    public ResponseEntity<UserCareerPackageDTO> assignPackage(@RequestBody AssignCareerPackageRequest request) {
+        return ResponseEntity.ok(userCareerPackageService.assignPackage(request));
     }
 
     @PutMapping
