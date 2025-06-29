@@ -15,13 +15,12 @@ public class LearningDocumentService {
 
     private final LearningDocumentRepository documentRepository;
 
-    public String uploadFile(MultipartFile file, String userId, String fieldKey, DocumentCategory category) throws IOException {
+    public String uploadFile(MultipartFile file, String userId, DocumentCategory category) throws IOException {
         LearningDocument doc = LearningDocument.builder()
                 .fileName(file.getOriginalFilename())
                 .contentType(file.getContentType())
                 .content(file.getBytes())
                 .userId(userId)
-                .fieldKey(fieldKey)
                 .category(category)
                 .build();
 

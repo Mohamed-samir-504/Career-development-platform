@@ -20,7 +20,6 @@ public class LearningDocument {
     private String contentType;
     private byte[] content;
 
-    private String fieldKey;
     private String userId;
 
     @Enumerated(EnumType.STRING)

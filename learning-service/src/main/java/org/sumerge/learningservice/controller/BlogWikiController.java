@@ -26,7 +26,7 @@ public class BlogWikiController {
     // Create a wiki
     @PostMapping("/wikis")
     public ResponseEntity<BlogWiki> createWiki(@RequestBody BlogWikiDTO request) {
-        return ResponseEntity.ok(service.createBlog(request.getTitle(), request.getContent(), request.getAttachmentId()));
+        return ResponseEntity.ok(service.createWiki(request.getTitle(), request.getContent(), request.getAttachmentId()));
     }
 
     // Get all blogs

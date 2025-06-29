@@ -9,6 +9,7 @@ import org.sumerge.learningservice.enums.DocumentCategory;
 import org.sumerge.learningservice.service.LearningDocumentService;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/learning/files")
@@ -21,41 +22,38 @@ public class LearningDocumentController {
     public ResponseEntity<String> upload(
             @RequestParam("file") MultipartFile file,
             @RequestParam String userId,
-            @RequestParam String fieldKey,
             @RequestParam DocumentCategory category) throws IOException {
 
-        String id = documentService.uploadFile(file, userId, fieldKey, category);
+        String id = documentService.uploadFile(file, userId, category);
         return ResponseEntity.ok(id);
     }
 
     @PostMapping("/upload/template")
     public ResponseEntity<String> uploadTemplateFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam String userId,
-            @RequestParam String fieldKey) throws IOException {
+            @RequestParam String userId) throws IOException {
 
-        String id = documentService.uploadFile(file, userId, fieldKey, DocumentCategory.TEMPLATE_ATTACHMENT);
+        String id = documentService.uploadFile(file, userId, DocumentCategory.TEMPLATE_ATTACHMENT);
         return ResponseEntity.ok(id);
     }
 
     @PostMapping("/upload/submission")
     public ResponseEntity<String> uploadSubmissionFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam String userId,
-            @RequestParam String fieldKey) throws IOException {
+            @RequestParam String userId) throws IOException {
 
-        String id = documentService.uploadFile(file, userId, fieldKey, DocumentCategory.SUBMISSION);
+        String id = documentService.uploadFile(file, userId, DocumentCategory.SUBMISSION);
         return ResponseEntity.ok(id);
     }
 
     @PostMapping("/upload/content")
-    public ResponseEntity<String> uploadBlogWikiFile(
+    public ResponseEntity<Map<String, String>> uploadBlogWikiFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam String userId,
-            @RequestParam String fieldKey) throws IOException {
+            @RequestParam String userId) throws IOException {
 
-        String id = documentService.uploadFile(file, userId, fieldKey, DocumentCategory.BLOG_WIKI_ATTACHMENT);
-        return ResponseEntity.ok(id);
+        String id = documentService.uploadFile(file, userId, DocumentCategory.BLOG_WIKI_ATTACHMENT);
+        Map<String, String> response = Map.of("attachmentId", id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
