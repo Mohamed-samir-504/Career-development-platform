@@ -2,7 +2,9 @@
 package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserCareerPackage {
 
     public UserCareerPackage(UUID userId,UUID reviewerId,PackageStatus status,CareerPackageTemplate template) {

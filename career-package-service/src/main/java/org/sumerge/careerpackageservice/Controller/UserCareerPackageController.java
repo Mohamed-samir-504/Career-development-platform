@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.sumerge.careerpackageservice.Dto.Request.AssignCareerPackageRequest;
 import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
+import org.sumerge.careerpackageservice.Enums.PackageStatus;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Service.UserCareerPackageService;
 import org.springframework.web.bind.annotation.*;
@@ -58,11 +59,17 @@ public class UserCareerPackageController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserCareerPackage> updateStatus(
+    public ResponseEntity<UserCareerPackage> updateUserCareerPackage(
             @PathVariable UUID id,
             @RequestBody UserCareerPackage request
     ) {
-        return ResponseEntity.ok(userCareerPackageService.updateStatus(id, request.getStatus()));
+        UserCareerPackage updatedPackage = userCareerPackageService.updateUserCareerPackage(id, request);
+
+        if (updatedPackage.getStatus() == PackageStatus.UNDER_REVIEW) {
+            userCareerPackageService.sendNotificationToManager(updatedPackage);
+        }
+
+        return ResponseEntity.ok(updatedPackage);
     }
 
 
