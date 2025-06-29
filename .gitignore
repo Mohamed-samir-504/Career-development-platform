@@ -38,3 +38,4 @@ auth-service/src/main/resources/application.properties
 user-service/src/main/resources/application.properties
 career-package-service/src/main/resources/application.properties
 learning-service/src/main/resources/application.properties
+notification-service/src/main/resources/application.properties
