@@ -15,6 +15,7 @@ public class UserResponse {
     private UUID id;
     private String name;
     private String email;
+    private String imageId;
     private User.Role role;
     private UUID managerId;
     private LocalDateTime createdAt;

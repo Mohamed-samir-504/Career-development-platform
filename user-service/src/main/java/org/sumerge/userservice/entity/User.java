@@ -34,6 +34,8 @@ public class User {
     @JoinColumn(name = "manager_id")
     private User manager;
 
+    private String imageId; //reference to mongoDb
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -54,4 +56,6 @@ public class User {
         MANAGER,
         ADMIN
     }
+
+
 }

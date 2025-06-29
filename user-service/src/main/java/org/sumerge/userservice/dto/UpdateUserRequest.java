@@ -19,4 +19,6 @@ public class UpdateUserRequest {
     private User.Role role;
 
     private UUID managerId;
+
+    private String imageId;
 }
