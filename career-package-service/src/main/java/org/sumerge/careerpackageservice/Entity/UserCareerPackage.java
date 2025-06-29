@@ -13,6 +13,15 @@ import java.util.List;
 @Data
 @Entity
 public class UserCareerPackage {
+
+    public UserCareerPackage(UUID userId,UUID reviewerId,PackageStatus status,CareerPackageTemplate template) {
+
+        this.userId = userId;
+        this.reviewerId = reviewerId;
+        this.status = status;
+        this.template = template;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

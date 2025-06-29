@@ -29,10 +29,6 @@ public class UserSectionResponseController {
         return userSectionResponseService.getById(id);
     }
 
-//    @PostMapping
-//    public UserSectionResponse create(@RequestBody UserSectionResponse obj) {
-//        return userSectionResponseService.create(obj);
-//    }
 
     @PutMapping
     public UserSectionResponse update(@RequestBody UserSectionResponse obj) {

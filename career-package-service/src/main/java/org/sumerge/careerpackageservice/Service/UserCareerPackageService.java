@@ -49,43 +49,45 @@ public class UserCareerPackageService {
 
     @Transactional(readOnly = true)
     public UserCareerPackage getFullyLoadedPackageByUserId(UUID userId) {
-        UserCareerPackage pkg = userCareerPackageRepository.findByUserId(userId);
+        UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserId(userId);
 
-        if (pkg == null) return null;
+        if (userCareerPackage == null) return null;
 
         // Force fetch template and all sections + fields
-        pkg.getTemplate().getSections().forEach(section -> {
+        userCareerPackage.getTemplate().getSections().forEach(section -> {
             section.getFields().size(); // triggers fetch
         });
 
         // Force fetch user responses and nested field responses
-        pkg.getSectionResponses().forEach(response -> {
+        userCareerPackage.getSectionResponses().forEach(response -> {
             response.getFieldResponses().size(); // triggers fetch
         });
 
-        return pkg;
+        return userCareerPackage;
     }
 
     public UserCareerPackage updateStatus(UUID id, PackageStatus status) {
-        UserCareerPackage pkg = userCareerPackageRepository.findById(id)
+        UserCareerPackage userCareerPackage = userCareerPackageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Career package not found"));
 
-        pkg.setStatus(PackageStatus.valueOf(String.valueOf(status)));
-        return userCareerPackageRepository.save(pkg);
+        userCareerPackage.setStatus(PackageStatus.valueOf(String.valueOf(status)));
+        return userCareerPackageRepository.save(userCareerPackage);
     }
 
     public UserCareerPackageDTO assignPackage(AssignCareerPackageRequest request) {
         CareerPackageTemplate template = templateRepository.findById(request.getTemplateId())
                 .orElseThrow(() -> new EntityNotFoundException("Template not found"));
 
-        UserCareerPackage pkg = new UserCareerPackage();
-        pkg.setUserId(request.getUserId());
-        pkg.setReviewerId(request.getReviewerId());
-        pkg.setStatus(request.getStatus());
-        pkg.setTemplate(template);
+        UserCareerPackage userCareerPackage = new UserCareerPackage(
+                request.getUserId(),
+                request.getReviewerId(),
+                request.getStatus(),
+                template
+        );
 
-        userCareerPackageRepository.save(pkg);
-        return mapper.toDto(pkg);
+
+        userCareerPackageRepository.save(userCareerPackage);
+        return mapper.toDto(userCareerPackage);
     }
 
 

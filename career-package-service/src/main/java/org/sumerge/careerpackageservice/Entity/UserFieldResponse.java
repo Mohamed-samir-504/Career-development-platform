@@ -10,6 +10,12 @@ import java.util.UUID;
 @Entity
 public class UserFieldResponse {
 
+    public UserFieldResponse(SectionFieldTemplate fieldTemplate, String value, UserSectionResponse sectionResponse) {
+
+        this.fieldTemplate = fieldTemplate;
+        this.value = value;
+        this.sectionResponse = sectionResponse;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -22,6 +28,6 @@ public class UserFieldResponse {
 
     @ManyToOne
     @JoinColumn(name = "section_response_id")
-    @JsonIgnore // 🔁 Prevents infinite recursion
+    @JsonIgnore
     private UserSectionResponse sectionResponse;
 }

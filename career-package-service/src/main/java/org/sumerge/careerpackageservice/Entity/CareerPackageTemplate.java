@@ -10,6 +10,13 @@ import java.util.UUID;
 @Data
 @Entity
 public class CareerPackageTemplate {
+
+    public CareerPackageTemplate(String title,String description,List<SectionTemplate> sections) {
+
+        this.title = title;
+        this.description = description;
+        this.sections = sections;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
