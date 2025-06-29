@@ -45,24 +45,25 @@ public class UserSectionResponseService {
     }
 
     public UserSectionResponse submitSection(SubmitUserSectionRequest request) {
-        UserCareerPackage pkg = careerPackageRepo.findById(request.getUserCareerPackageId())
+        UserCareerPackage userCareerPackage = careerPackageRepo.findById(request.getUserCareerPackageId())
                 .orElseThrow(() -> new RuntimeException("Career package not found"));
 
         SectionTemplate sectionTemplate = sectionTemplateRepo.findById(request.getSectionTemplateId())
                 .orElseThrow(() -> new RuntimeException("Section template not found"));
 
         UserSectionResponse sectionResponse = new UserSectionResponse();
-        sectionResponse.setUserCareerPackage(pkg);
+        sectionResponse.setUserCareerPackage(userCareerPackage);
         sectionResponse.setSectionTemplate(sectionTemplate);
 
-        List<UserFieldResponse> responses = request.getFieldResponses().stream().map(dto -> {
-            SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(dto.getFieldTemplateId())
+        List<UserFieldResponse> responses = request.getFieldResponses().stream().map(userFieldResponseDTO -> {
+            SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
                     .orElseThrow(() -> new RuntimeException("Field template not found"));
-            UserFieldResponse response = new UserFieldResponse();
-            response.setFieldTemplate(fieldTemplate);
-            response.setValue(dto.getValue());
-            response.setSectionResponse(sectionResponse);
-            return response;
+
+            return new UserFieldResponse(
+                    fieldTemplate,
+                    userFieldResponseDTO.getValue(),
+                    sectionResponse
+            );
         }).toList();
 
         sectionResponse.setFieldResponses(responses);
@@ -74,13 +75,14 @@ public class UserSectionResponseService {
                 .orElseThrow(() -> new RuntimeException("Section response not found"));
 
         sectionResponse.getFieldResponses().clear();
-        request.getFieldResponses().forEach(dto -> {
-            SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(dto.getFieldTemplateId())
+        request.getFieldResponses().forEach(userFieldResponseDTO -> {
+            SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
                     .orElseThrow(() -> new RuntimeException("Field template not found"));
-            UserFieldResponse response = new UserFieldResponse();
-            response.setFieldTemplate(fieldTemplate);
-            response.setValue(dto.getValue());
-            response.setSectionResponse(sectionResponse);
+            UserFieldResponse response = new UserFieldResponse(
+                    fieldTemplate,
+                    userFieldResponseDTO.getValue(),
+                    sectionResponse
+            );
             sectionResponse.getFieldResponses().add(response);
         });
 

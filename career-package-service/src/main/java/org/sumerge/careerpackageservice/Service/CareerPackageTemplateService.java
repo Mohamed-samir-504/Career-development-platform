@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.sumerge.careerpackageservice.Repository.SectionFieldTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.SectionTemplateRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CareerPackageTemplateService {
@@ -52,10 +49,11 @@ public class CareerPackageTemplateService {
     }
 
     public CareerPackageTemplateDTO createNewPackage(CreateCareerPackageRequest request) {
-        CareerPackageTemplate newPackage = new CareerPackageTemplate();
-        newPackage.setTitle(request.getTitle());
-        newPackage.setDescription(request.getDescription());
-        newPackage.setSections(new ArrayList<>());
+        CareerPackageTemplate newPackage = new CareerPackageTemplate(
+                request.getTitle(),
+                request.getDescription(),
+                new ArrayList<>()
+        );
 
         CareerPackageTemplate saved = careerPackageTemplateRepository.save(newPackage);
 
@@ -63,81 +61,82 @@ public class CareerPackageTemplateService {
     }
 
     public void syncChanges(UUID packageId, CareerPackageEditRequest request) {
-        CareerPackageTemplate pkg = careerPackageTemplateRepository.findById(packageId)
+        CareerPackageTemplate userCareerPackage = careerPackageTemplateRepository.findById(packageId)
                 .orElseThrow(() -> new RuntimeException("Package not found"));
 
         // === 1. Update Package Metadata ===
-        if (request.getTitle() != null) pkg.setTitle(request.getTitle());
-        if (request.getDescription() != null) pkg.setDescription(request.getDescription());
+        if (request.getTitle() != null) userCareerPackage.setTitle(request.getTitle());
+        if (request.getDescription() != null) userCareerPackage.setDescription(request.getDescription());
 
         // === 2. Delete Sections ===
-        if (!request.getDeletedSectionIds().isEmpty()) {
-            request.getDeletedSectionIds().forEach(sectionTemplateRepository::deleteById);
-        }
+        request.getDeletedSectionIds()
+                .forEach(sectionTemplateRepository::deleteById);
 
         // === 3. Delete Fields ===
-        if (!request.getDeletedFieldIds().isEmpty()) {
-            request.getDeletedFieldIds().forEach(sectionFieldTemplateRepository::deleteById);
-        }
+        request.getDeletedFieldIds()
+                .forEach(sectionFieldTemplateRepository::deleteById);
 
         // === 4. Update Existing Sections ===
-        if (!request.getUpdatedSections().isEmpty()) {
-            for (SectionTemplateDTO dto : request.getUpdatedSections()) {
-                SectionTemplate section = sectionTemplateRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("section not found"));
+        request.getUpdatedSections().stream()
+                .map(sectionTemplateDTO -> new AbstractMap.SimpleEntry<>(
+                        sectionTemplateDTO,
+                        sectionTemplateRepository.findById(sectionTemplateDTO.getId())
+                                .orElseThrow(() -> new RuntimeException("Section not found"))
+                ))
+                .forEach(entry -> {
+                    SectionTemplateDTO sectionTemplateDTO = entry.getKey();
+                    SectionTemplate section = entry.getValue();
 
-                section.setTitle(dto.getTitle());
-                section.setType(dto.getType());
-                section.setInstructions(dto.getInstructions());
-                section.setRequirements(dto.getRequirements());
+                    section.setTitle(sectionTemplateDTO.getTitle());
+                    section.setType(sectionTemplateDTO.getType());
+                    section.setInstructions(sectionTemplateDTO.getInstructions());
+                    section.setRequirements(sectionTemplateDTO.getRequirements());
 
-                sectionTemplateRepository.save(section); // save update
-            }
-        }
+                    sectionTemplateRepository.save(section);
+                });
 
         // === 5. Update Existing Fields ===
-        if (!request.getUpdatedFields().isEmpty()) {
-            for (SectionFieldTemplateDTO dto : request.getUpdatedFields()) {
-                SectionFieldTemplate field = sectionFieldTemplateRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("Field not found"));
+        request.getUpdatedFields().stream()
+                .map(sectionFieldTemplateDTO -> new AbstractMap.SimpleEntry<>(
+                        sectionFieldTemplateDTO,
+                        sectionFieldTemplateRepository.findById(sectionFieldTemplateDTO.getId())
+                                .orElseThrow(() -> new RuntimeException("Field not found"))
+                ))
+                .forEach(entry -> {
+                    SectionFieldTemplateDTO sectionFieldTemplateDTO = entry.getKey();
+                    SectionFieldTemplate field = entry.getValue();
 
-                field.setLabel(dto.getLabel());
-                field.setFieldKey(dto.getFieldKey());
-                field.setFieldType(dto.getFieldType());
-                field.setRequired(dto.isRequired());
+                    field.setLabel(sectionFieldTemplateDTO.getLabel());
+                    field.setFieldKey(sectionFieldTemplateDTO.getFieldKey());
+                    field.setFieldType(sectionFieldTemplateDTO.getFieldType());
+                    field.setRequired(sectionFieldTemplateDTO.isRequired());
 
-                sectionFieldTemplateRepository.save(field);
-            }
-        }
+                    sectionFieldTemplateRepository.save(field);
+                });
 
         // === 6. Add New Sections ===
-        if (!request.getNewSections().isEmpty()) {
-            for (SectionTemplateDTO dto : request.getNewSections()) {
-                SectionTemplate section = mapper.toEntity(dto);
-                pkg.getSections().add(section);
-                sectionTemplateRepository.save(section);
-
-            }
-        }
+        request.getNewSections().stream()
+                .map(mapper::toEntity)
+                .forEach(section -> {
+                    userCareerPackage.getSections().add(section);
+                    sectionTemplateRepository.save(section);
+                });
 
         // === 7. Add New Fields ===
-        if (!request.getNewFields().isEmpty()) {
-            for (SectionFieldTemplateDTO dto : request.getNewFields()) {
-                if(dto.getSectionTemplateId()!= null){
-                    SectionTemplate section = sectionTemplateRepository.findById(dto.getSectionTemplateId())
+        request.getNewFields().stream()
+                .filter(sectionFieldTemplateDTO -> sectionFieldTemplateDTO.getSectionTemplateId() != null)
+                .forEach(sectionFieldTemplateDTO -> {
+                    SectionTemplate section = sectionTemplateRepository.findById(sectionFieldTemplateDTO.getSectionTemplateId())
                             .orElseThrow(() -> new RuntimeException("Section not found for field"));
-
-                    SectionFieldTemplate field = mapper.toEntity(dto);
+                    SectionFieldTemplate field = mapper.toEntity(sectionFieldTemplateDTO);
                     section.getFields().add(field);
                     sectionTemplateRepository.save(section);
-                }
-
-            }
-        }
+                });
 
         // === 8. Save Package ===
-        careerPackageTemplateRepository.save(pkg);
+        careerPackageTemplateRepository.save(userCareerPackage);
     }
+
 
 
 }

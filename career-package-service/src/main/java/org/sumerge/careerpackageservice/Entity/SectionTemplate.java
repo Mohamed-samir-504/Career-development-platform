@@ -2,7 +2,9 @@
 package org.sumerge.careerpackageservice.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.sumerge.careerpackageservice.Enums.SectionType;
 import java.util.UUID;
 
@@ -10,7 +12,8 @@ import java.util.List;
 
 @Data
 @Entity
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class SectionTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
