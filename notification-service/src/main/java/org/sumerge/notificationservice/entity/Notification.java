@@ -24,6 +24,7 @@ public class Notification {
     private UUID userId;
 
     private String message;
+    private String type;
 
     private boolean read = false;
 
