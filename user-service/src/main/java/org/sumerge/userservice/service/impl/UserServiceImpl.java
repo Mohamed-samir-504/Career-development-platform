@@ -69,6 +69,8 @@ public class UserServiceImpl implements UserService {
         }
         if (request.getRole() != null) user.setRole(request.getRole());
 
+        if(request.getImageId()!=null) user.setImageId(request.getImageId());
+
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
         return mapToDto(user);
