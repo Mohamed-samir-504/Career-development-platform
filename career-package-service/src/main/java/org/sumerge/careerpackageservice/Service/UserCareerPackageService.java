@@ -2,8 +2,10 @@
 package org.sumerge.careerpackageservice.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.sumerge.careerpackageservice.Dto.Request.AssignCareerPackageRequest;
+import org.sumerge.careerpackageservice.Dto.Request.SendNotificationRequest;
 import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
 import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
@@ -24,11 +26,13 @@ public class UserCareerPackageService {
     private final UserCareerPackageRepository userCareerPackageRepository;
     private final CareerPackageTemplateRepository templateRepository;
     private final UserCareerPackageMapper mapper;
+    private final KafkaTemplate<String, SendNotificationRequest> kafkaTemplate;
 
-    public UserCareerPackageService(UserCareerPackageRepository userCareerPackageRepository, CareerPackageTemplateRepository templateRepository, UserCareerPackageMapper mapper) {
+    public UserCareerPackageService(UserCareerPackageRepository userCareerPackageRepository, CareerPackageTemplateRepository templateRepository, UserCareerPackageMapper mapper, KafkaTemplate<String, SendNotificationRequest> kafkaTemplate) {
         this.userCareerPackageRepository = userCareerPackageRepository;
         this.templateRepository = templateRepository;
         this.mapper = mapper;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public List<UserCareerPackage> getAll() {
@@ -49,43 +53,60 @@ public class UserCareerPackageService {
 
     @Transactional(readOnly = true)
     public UserCareerPackage getFullyLoadedPackageByUserId(UUID userId) {
-        UserCareerPackage pkg = userCareerPackageRepository.findByUserId(userId);
+        UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserId(userId);
 
-        if (pkg == null) return null;
+        if (userCareerPackage == null) return null;
 
         // Force fetch template and all sections + fields
-        pkg.getTemplate().getSections().forEach(section -> {
+        userCareerPackage.getTemplate().getSections().forEach(section -> {
             section.getFields().size(); // triggers fetch
         });
 
         // Force fetch user responses and nested field responses
-        pkg.getSectionResponses().forEach(response -> {
+        userCareerPackage.getSectionResponses().forEach(response -> {
             response.getFieldResponses().size(); // triggers fetch
         });
 
-        return pkg;
+        return userCareerPackage;
     }
 
-    public UserCareerPackage updateStatus(UUID id, PackageStatus status) {
-        UserCareerPackage pkg = userCareerPackageRepository.findById(id)
+    public UserCareerPackage updateUserCareerPackage(UUID id, UserCareerPackage request) {
+        UserCareerPackage userCareerPackage = userCareerPackageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Career package not found"));
 
-        pkg.setStatus(PackageStatus.valueOf(String.valueOf(status)));
-        return userCareerPackageRepository.save(pkg);
+        userCareerPackage.setStatus(PackageStatus.valueOf(String.valueOf(request.getStatus())));
+        return userCareerPackageRepository.save(userCareerPackage);
+    }
+
+    public void sendNotificationToManager(UserCareerPackage userCareerPackage) {
+        SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
+                userCareerPackage.getUserId(),
+                userCareerPackage.getReviewerId(),
+                "An Employee has submitted his career package for review",
+                "SUBMISSION"
+        );
+        try {
+            kafkaTemplate.send("career-package-submitted", sendNotificationRequest);
+        } catch (Exception e) {
+
+            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
+        }
     }
 
     public UserCareerPackageDTO assignPackage(AssignCareerPackageRequest request) {
         CareerPackageTemplate template = templateRepository.findById(request.getTemplateId())
                 .orElseThrow(() -> new EntityNotFoundException("Template not found"));
 
-        UserCareerPackage pkg = new UserCareerPackage();
-        pkg.setUserId(request.getUserId());
-        pkg.setReviewerId(request.getReviewerId());
-        pkg.setStatus(request.getStatus());
-        pkg.setTemplate(template);
+        UserCareerPackage userCareerPackage = new UserCareerPackage(
+                request.getUserId(),
+                request.getReviewerId(),
+                request.getStatus(),
+                template
+        );
 
-        userCareerPackageRepository.save(pkg);
-        return mapper.toDto(pkg);
+
+        userCareerPackageRepository.save(userCareerPackage);
+        return mapper.toDto(userCareerPackage);
     }
 
 

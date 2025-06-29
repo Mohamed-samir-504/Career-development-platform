@@ -21,7 +21,8 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private UUID userId;
+    private UUID senderId;
+    private UUID receiverId;
 
     private String message;
     private String type;

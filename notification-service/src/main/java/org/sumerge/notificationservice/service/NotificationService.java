@@ -1,28 +1,37 @@
 package org.sumerge.notificationservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.sumerge.notificationservice.dto.NotificationRequest;
 import org.sumerge.notificationservice.entity.Notification;
+import org.sumerge.notificationservice.mapper.NotificationMapper;
 import org.sumerge.notificationservice.repository.NotificationRepository;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+
 public class NotificationService {
 
     private final NotificationRepository notificationRepo;
+    private final NotificationMapper notificationMapper;
 
-    public Notification createNotification(UUID userId, String message) {
+    public NotificationService(NotificationRepository notificationRepo, NotificationMapper notificationMapper) {
+        this.notificationRepo = notificationRepo;
+        this.notificationMapper = notificationMapper;
+    }
+
+    public Notification createNotification(UUID receiverId, String message) {
         return notificationRepo.save(Notification.builder()
-                .userId(userId)
+                .receiverId(receiverId)
                 .message(message)
                 .build());
     }
 
-    public List<Notification> getUserNotifications(UUID userId) {
-        return notificationRepo.findByUserId(userId);
+    public List<Notification> getUserNotifications(UUID receiverId) {
+        return notificationRepo.findByReceiverId(receiverId);
     }
 
     public void markAsRead(UUID notificationId) {
@@ -30,6 +39,12 @@ public class NotificationService {
             notification.setRead(true);
             notificationRepo.save(notification);
         });
+    }
+
+    @KafkaListener(topics = "career-package-submitted", groupId = "notification-group")
+    public void consume(NotificationRequest request) {
+
+        notificationRepo.save(notificationMapper.toEntity(request));
     }
 }
 

@@ -17,7 +17,7 @@ public class UserSectionResponse {
 
     @ManyToOne
     @JoinColumn(name = "user_career_package_id")
-    @JsonIgnore // 🔁 Prevents recursion
+    @JsonIgnore
     private UserCareerPackage userCareerPackage;
 
     @ManyToOne
