@@ -2,13 +2,16 @@
 package org.sumerge.careerpackageservice.Service;
 
 import org.sumerge.careerpackageservice.Dto.Request.SubmitUserSectionRequest;
+import org.sumerge.careerpackageservice.Dto.UserFieldResponseDTO;
 import org.sumerge.careerpackageservice.Entity.*;
 import org.sumerge.careerpackageservice.Repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserSectionResponseService {
@@ -52,7 +55,6 @@ public class UserSectionResponseService {
                 .orElseThrow(() -> new RuntimeException("Section template not found"));
 
         UserSectionResponse sectionResponse = new UserSectionResponse();
-        sectionResponse.setUserCareerPackage(userCareerPackage);
         sectionResponse.setSectionTemplate(sectionTemplate);
 
         List<UserFieldResponse> responses = request.getFieldResponses().stream().map(userFieldResponseDTO -> {
@@ -61,12 +63,12 @@ public class UserSectionResponseService {
 
             return new UserFieldResponse(
                     fieldTemplate,
-                    userFieldResponseDTO.getValue(),
-                    sectionResponse
+                    userFieldResponseDTO.getValue()
             );
         }).toList();
 
         sectionResponse.setFieldResponses(responses);
+        userCareerPackage.getSectionResponses().add(sectionResponse);
         return sectionResponseRepo.save(sectionResponse);
     }
 
@@ -74,18 +76,23 @@ public class UserSectionResponseService {
         UserSectionResponse sectionResponse = sectionResponseRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Section response not found"));
 
-        sectionResponse.getFieldResponses().clear();
-        request.getFieldResponses().forEach(userFieldResponseDTO -> {
-            SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
-                    .orElseThrow(() -> new RuntimeException("Field template not found"));
-            UserFieldResponse response = new UserFieldResponse(
-                    fieldTemplate,
-                    userFieldResponseDTO.getValue(),
-                    sectionResponse
-            );
-            sectionResponse.getFieldResponses().add(response);
-        });
+        // Map each UserFieldResponseId with its UserFieldResponse
+        Map<UUID, UserFieldResponse> existingResponsesById = sectionResponse.getFieldResponses().stream()
+                .filter(r -> r.getId() != null)
+                .collect(Collectors.toMap(UserFieldResponse::getId, r -> r));
+
+        for (UserFieldResponseDTO userFieldResponseDTO : request.getFieldResponses()) {
+            UUID userFieldResponseId = userFieldResponseDTO.getId();
+
+            UserFieldResponse existingResponse = existingResponsesById.get(userFieldResponseId);
+            if (existingResponse != null) {
+                existingResponse.setValue(userFieldResponseDTO.getValue());
+            } else {
+                throw new RuntimeException("Field response with ID " + userFieldResponseId + " not found in this section");
+            }
+        }
 
         return sectionResponseRepo.save(sectionResponse);
     }
+
 }

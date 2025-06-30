@@ -1,6 +1,5 @@
 package org.sumerge.careerpackageservice.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,11 +13,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserFieldResponse {
 
-    public UserFieldResponse(SectionFieldTemplate fieldTemplate, String value, UserSectionResponse sectionResponse) {
+    public UserFieldResponse(SectionFieldTemplate fieldTemplate, String value) {
 
         this.fieldTemplate = fieldTemplate;
         this.value = value;
-        this.sectionResponse = sectionResponse;
+
     }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,8 +29,4 @@ public class UserFieldResponse {
     @JoinColumn(name = "field_template_id")
     private SectionFieldTemplate fieldTemplate;
 
-    @ManyToOne
-    @JoinColumn(name = "section_response_id")
-    @JsonIgnore
-    private UserSectionResponse sectionResponse;
 }

@@ -29,12 +29,6 @@ public class UserSectionResponseController {
         return userSectionResponseService.getById(id);
     }
 
-
-    @PutMapping
-    public UserSectionResponse update(@RequestBody UserSectionResponse obj) {
-        return userSectionResponseService.create(obj);
-    }
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         userSectionResponseService.delete(id);

@@ -43,6 +43,7 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "fieldResponses", target = "fieldResponses")
     UserSectionResponseDTO toDto(UserSectionResponse response);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "fieldTemplate.id", target = "fieldTemplateId")
     @Mapping(source = "value", target = "value")
     UserFieldResponseDTO toDto(UserFieldResponse response);
