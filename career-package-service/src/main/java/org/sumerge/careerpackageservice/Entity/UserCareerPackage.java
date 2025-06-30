@@ -41,6 +41,7 @@ public class UserCareerPackage {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private CareerPackageTemplate template;
 
-    @OneToMany(mappedBy = "userCareerPackage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_career_package_id")
     private List<UserSectionResponse> sectionResponses;
 }

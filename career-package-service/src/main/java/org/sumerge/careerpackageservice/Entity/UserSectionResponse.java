@@ -1,6 +1,5 @@
 package org.sumerge.careerpackageservice.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,15 +14,16 @@ public class UserSectionResponse {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_career_package_id")
-    @JsonIgnore
-    private UserCareerPackage userCareerPackage;
+//    @ManyToOne
+//    @JoinColumn(name = "user_career_package_id")
+//    @JsonIgnore
+//    private UserCareerPackage userCareerPackage;
 
     @ManyToOne
     @JoinColumn(name = "section_template_id")
     private SectionTemplate sectionTemplate;
 
-    @OneToMany(mappedBy = "sectionResponse", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "section_response_id")
     private List<UserFieldResponse> fieldResponses;
 }

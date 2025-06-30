@@ -5,6 +5,7 @@ import java.util.UUID;
 
 @Data
 public class UserFieldResponseDTO {
+    private UUID id;
     private UUID fieldTemplateId;
     private String value;
 }
