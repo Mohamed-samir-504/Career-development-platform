@@ -53,7 +53,7 @@ public class UserCareerPackageService {
 
     @Transactional(readOnly = true)
     public UserCareerPackage getFullyLoadedPackageByUserId(UUID userId) {
-        UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserId(userId);
+        UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserIdAndStatus(userId, PackageStatus.IN_PROGRESS);
 
         if (userCareerPackage == null) return null;
 
