@@ -18,8 +18,11 @@ public class LearningSubmissionController {
 
     @PostMapping
     public ResponseEntity<LearningSubmissionDTO> submit(@RequestBody LearningSubmissionDTO submissionDTO) {
+        submissionService.sendNotificationToManager(submissionDTO);
         return ResponseEntity.ok(submissionService.saveSubmission(submissionDTO));
     }
+
+
 
 
     @GetMapping("/user/{userId}")
@@ -35,6 +38,15 @@ public class LearningSubmissionController {
     @GetMapping("/{id}")
     public ResponseEntity<LearningSubmissionDTO> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(submissionService.getSubmission(id));
+    }
+
+    @PostMapping("/{id}/review")
+    public ResponseEntity<Void> reviewSubmission(
+            @PathVariable UUID id,
+            @RequestParam boolean accepted) {
+        LearningSubmissionDTO dto = submissionService.reviewSubmission(id, accepted);
+        submissionService.sendNotificationToUser(dto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

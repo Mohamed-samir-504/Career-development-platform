@@ -1,11 +1,14 @@
 package org.sumerge.learningservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.sumerge.learningservice.dto.SendNotificationRequest;
 import org.sumerge.learningservice.dto.submission.LearningSubmissionDTO;
 import org.sumerge.learningservice.entity.LearningMaterialTemplate;
 import org.sumerge.learningservice.entity.LearningSectionResponse;
 import org.sumerge.learningservice.entity.LearningSubmission;
+import org.sumerge.learningservice.enums.SubmissionStatus;
 import org.sumerge.learningservice.mapper.LearningMaterialMapper;
 import org.sumerge.learningservice.repository.LearningMaterialTemplateRepository;
 import org.sumerge.learningservice.repository.LearningSubmissionRepository;
@@ -21,6 +24,7 @@ public class LearningSubmissionService {
     private final LearningSubmissionRepository submissionRepository;
     private final LearningMaterialTemplateRepository templateRepository;
     private final LearningMaterialMapper mapper;
+    private final KafkaTemplate<String, SendNotificationRequest> kafkaTemplate;
 
     public List<LearningSubmissionDTO> getSubmissionsByUser(UUID userId) {
         return submissionRepository.findByUserId(userId)
@@ -62,5 +66,50 @@ public class LearningSubmissionService {
 
     public void deleteSubmission(UUID id) {
         submissionRepository.deleteById(id);
+    }
+
+    public LearningSubmissionDTO reviewSubmission(UUID submissionId, boolean accepted) {
+
+        LearningSubmission submission = submissionRepository.findById(submissionId)
+              .orElseThrow(() -> new RuntimeException("Submission not found with id: " + submissionId));
+        if (submission.getStatus() != SubmissionStatus.PENDING) {
+            throw new IllegalStateException("Cannot review a submission that has already been reviewed.");
+        }
+
+        submission.setStatus(accepted ? SubmissionStatus.APPROVED : SubmissionStatus.REJECTED);
+        submissionRepository.save(submission);
+
+        LearningSubmissionDTO dto = mapper.toDto(submission);
+        return dto;
+    }
+
+    public void sendNotificationToManager(LearningSubmissionDTO learningSubmission) {
+        SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
+                learningSubmission.getUserId(),
+                learningSubmission.getManagerId(),
+                "An Employee has submitted a learning material for review",
+                "SUBMISSION"
+        );
+        try {
+            kafkaTemplate.send("learning-material-submitted", sendNotificationRequest);
+        } catch (Exception e) {
+
+            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
+        }
+    }
+
+    public void sendNotificationToUser(LearningSubmissionDTO learningSubmission) {
+        SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
+                learningSubmission.getManagerId(),
+                learningSubmission.getUserId(),
+                "Your manager has submitted reviewed your learning material",
+                "SUBMISSION"
+        );
+        try {
+            kafkaTemplate.send("learning-submission-reviewed", sendNotificationRequest);
+        } catch (Exception e) {
+
+            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
+        }
     }
 }
