@@ -14,6 +14,9 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "template", target = "template")
     @Mapping(source = "sectionResponses", target = "sectionResponses")
     @Mapping(source = "status", target = "status")
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "reviewerId", target = "reviewerId")
+    @Mapping(source = "reviewerComment", target = "reviewerComment")
     UserCareerPackageDTO toDto(UserCareerPackage entity);
 
     @Mapping(source = "id", target = "id")
