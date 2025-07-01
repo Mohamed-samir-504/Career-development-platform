@@ -1,6 +1,5 @@
 package org.sumerge.notificationservice.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.sumerge.notificationservice.dto.NotificationRequest;
@@ -39,6 +38,10 @@ public class NotificationService {
             notification.setRead(true);
             notificationRepo.save(notification);
         });
+    }
+
+    public void delete(UUID notificationId) {
+        notificationRepo.deleteById(notificationId);
     }
 
     @KafkaListener(topics = "career-package-submitted", groupId = "notification-group")
