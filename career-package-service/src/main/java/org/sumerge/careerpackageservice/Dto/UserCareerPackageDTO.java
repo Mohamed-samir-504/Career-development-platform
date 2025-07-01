@@ -9,7 +9,10 @@ import java.util.UUID;
 @Data
 public class UserCareerPackageDTO {
     private UUID id;
+    private UUID userId;
+    private UUID reviewerId;
     private CareerPackageTemplateDTO template;
     private List<UserSectionResponseDTO> sectionResponses;
     private PackageStatus status;
+    private String reviewerComment;
 }

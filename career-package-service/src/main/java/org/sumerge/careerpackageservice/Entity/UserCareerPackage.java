@@ -35,6 +35,7 @@ public class UserCareerPackage {
 
     @Enumerated(EnumType.STRING)
     private PackageStatus status;
+    private String reviewerComment;
 
     @ManyToOne
     @JoinColumn(name = "template_id", nullable = false)

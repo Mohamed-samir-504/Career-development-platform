@@ -75,6 +75,15 @@ public class UserCareerPackageService {
                 .orElseThrow(() -> new RuntimeException("Career package not found"));
 
         userCareerPackage.setStatus(PackageStatus.valueOf(String.valueOf(request.getStatus())));
+        userCareerPackage.setReviewerComment(String.valueOf(request.getReviewerComment()));
+
+        if (request.getStatus() == PackageStatus.UNDER_REVIEW) {
+            sendNotificationToManager(request);
+        }
+        else{
+            sendNotificationToEmployee(request);
+        }
+
         return userCareerPackageRepository.save(userCareerPackage);
     }
 
@@ -84,6 +93,34 @@ public class UserCareerPackageService {
                 userCareerPackage.getReviewerId(),
                 "An Employee has submitted his career package for review",
                 "SUBMISSION"
+        );
+        try {
+            kafkaTemplate.send("career-package-submitted", sendNotificationRequest);
+        } catch (Exception e) {
+
+            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
+        }
+    }
+
+    public void sendNotificationToEmployee(UserCareerPackage userCareerPackage) {
+
+        String message = "";
+        String type = "";
+
+        if (userCareerPackage.getStatus() == PackageStatus.APPROVED) {
+            message = "Your manager has approved your career package submission";
+            type = "APPROVAL";
+        }
+        else if (userCareerPackage.getStatus() == PackageStatus.REJECTED) {
+            message = "Your manager has rejected your career package submission";
+            type = "REJECTION";
+        }
+
+        SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
+                userCareerPackage.getReviewerId(),
+                userCareerPackage.getUserId(),
+                message,
+                type
         );
         try {
             kafkaTemplate.send("career-package-submitted", sendNotificationRequest);
