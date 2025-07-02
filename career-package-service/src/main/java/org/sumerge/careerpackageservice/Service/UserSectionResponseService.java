@@ -1,6 +1,7 @@
 
 package org.sumerge.careerpackageservice.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.sumerge.careerpackageservice.Dto.Request.SubmitUserSectionRequest;
 import org.sumerge.careerpackageservice.Dto.UserFieldResponseDTO;
 import org.sumerge.careerpackageservice.Entity.*;
@@ -49,17 +50,17 @@ public class UserSectionResponseService {
 
     public UserSectionResponse submitSection(SubmitUserSectionRequest request) {
         UserCareerPackage userCareerPackage = careerPackageRepo.findById(request.getUserCareerPackageId())
-                .orElseThrow(() -> new RuntimeException("Career package not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Career package not found"));
 
         SectionTemplate sectionTemplate = sectionTemplateRepo.findById(request.getSectionTemplateId())
-                .orElseThrow(() -> new RuntimeException("Section template not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Section template not found"));
 
         UserSectionResponse sectionResponse = new UserSectionResponse();
         sectionResponse.setSectionTemplate(sectionTemplate);
 
         List<UserFieldResponse> responses = request.getFieldResponses().stream().map(userFieldResponseDTO -> {
             SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
-                    .orElseThrow(() -> new RuntimeException("Field template not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
 
             return new UserFieldResponse(
                     fieldTemplate,
@@ -74,7 +75,7 @@ public class UserSectionResponseService {
 
     public UserSectionResponse updateSection(UUID id, SubmitUserSectionRequest request) {
         UserSectionResponse sectionResponse = sectionResponseRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Section response not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Section response not found"));
 
         //map existing responses by ID
         Map<UUID, UserFieldResponse> existingResponsesById = sectionResponse.getFieldResponses().stream()
@@ -96,7 +97,7 @@ public class UserSectionResponseService {
         if (request.getNewFieldResponses() != null) {
             for (UserFieldResponseDTO newUserField : request.getNewFieldResponses()) {
                 SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(newUserField.getFieldTemplateId())
-                        .orElseThrow(() -> new RuntimeException("Field template not found"));
+                        .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
                 UserFieldResponse newResponse = new UserFieldResponse(
                         fieldTemplate,
                         newUserField.getValue()

@@ -1,6 +1,7 @@
 
 package org.sumerge.careerpackageservice.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.sumerge.careerpackageservice.Dto.CareerPackageTemplateDTO;
 import org.sumerge.careerpackageservice.Dto.Request.CareerPackageEditRequest;
 import org.sumerge.careerpackageservice.Dto.Request.CreateCareerPackageRequest;
@@ -32,8 +33,8 @@ public class CareerPackageTemplateService {
         this.mapper = mapper;
     }
 
-    public List<CareerPackageTemplate> getAll() {
-        return careerPackageTemplateRepository.findAll();
+    public List<CareerPackageTemplateDTO> getAll() {
+        return mapper.toCareerPackageDtoList(careerPackageTemplateRepository.findAll());
     }
 
     public Optional<CareerPackageTemplate> getById(UUID id) {
@@ -62,26 +63,26 @@ public class CareerPackageTemplateService {
 
     public void syncChanges(UUID packageId, CareerPackageEditRequest request) {
         CareerPackageTemplate userCareerPackage = careerPackageTemplateRepository.findById(packageId)
-                .orElseThrow(() -> new RuntimeException("Package not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Package not found"));
 
-        // === 1. Update Package Metadata ===
+        //package data
         if (request.getTitle() != null) userCareerPackage.setTitle(request.getTitle());
         if (request.getDescription() != null) userCareerPackage.setDescription(request.getDescription());
 
-        // === 2. Delete Sections ===
+
         request.getDeletedSectionIds()
                 .forEach(sectionTemplateRepository::deleteById);
 
-        // === 3. Delete Fields ===
+
         request.getDeletedFieldIds()
                 .forEach(sectionFieldTemplateRepository::deleteById);
 
-        // === 4. Update Existing Sections ===
+        // update existing sections
         request.getUpdatedSections().stream()
                 .map(sectionTemplateDTO -> new AbstractMap.SimpleEntry<>(
                         sectionTemplateDTO,
                         sectionTemplateRepository.findById(sectionTemplateDTO.getId())
-                                .orElseThrow(() -> new RuntimeException("Section not found"))
+                                .orElseThrow(() -> new EntityNotFoundException("Section not found"))
                 ))
                 .forEach(entry -> {
                     SectionTemplateDTO sectionTemplateDTO = entry.getKey();
@@ -95,12 +96,12 @@ public class CareerPackageTemplateService {
                     sectionTemplateRepository.save(section);
                 });
 
-        // === 5. Update Existing Fields ===
+        // update existing fields
         request.getUpdatedFields().stream()
                 .map(sectionFieldTemplateDTO -> new AbstractMap.SimpleEntry<>(
                         sectionFieldTemplateDTO,
                         sectionFieldTemplateRepository.findById(sectionFieldTemplateDTO.getId())
-                                .orElseThrow(() -> new RuntimeException("Field not found"))
+                                .orElseThrow(() -> new EntityNotFoundException("Field not found"))
                 ))
                 .forEach(entry -> {
                     SectionFieldTemplateDTO sectionFieldTemplateDTO = entry.getKey();
@@ -114,7 +115,7 @@ public class CareerPackageTemplateService {
                     sectionFieldTemplateRepository.save(field);
                 });
 
-        // === 6. Add New Sections ===
+
         request.getNewSections().stream()
                 .map(mapper::toEntity)
                 .forEach(section -> {
@@ -122,18 +123,16 @@ public class CareerPackageTemplateService {
                     sectionTemplateRepository.save(section);
                 });
 
-        // === 7. Add New Fields ===
         request.getNewFields().stream()
                 .filter(sectionFieldTemplateDTO -> sectionFieldTemplateDTO.getSectionTemplateId() != null)
                 .forEach(sectionFieldTemplateDTO -> {
                     SectionTemplate section = sectionTemplateRepository.findById(sectionFieldTemplateDTO.getSectionTemplateId())
-                            .orElseThrow(() -> new RuntimeException("Section not found for field"));
+                            .orElseThrow(() -> new EntityNotFoundException("Section not found for field"));
                     SectionFieldTemplate field = mapper.toEntity(sectionFieldTemplateDTO);
                     section.getFields().add(field);
                     sectionTemplateRepository.save(section);
                 });
 
-        // === 8. Save Package ===
         careerPackageTemplateRepository.save(userCareerPackage);
     }
 

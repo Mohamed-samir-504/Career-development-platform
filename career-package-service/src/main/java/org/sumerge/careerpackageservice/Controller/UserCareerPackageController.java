@@ -1,12 +1,10 @@
 
 package org.sumerge.careerpackageservice.Controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.sumerge.careerpackageservice.Dto.Request.AssignCareerPackageRequest;
 import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
-import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Service.UserCareerPackageService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +12,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/user-career-package")
+@RequestMapping("/user-career-package")
 public class UserCareerPackageController {
 
 
     private final UserCareerPackageService userCareerPackageService;
 
-    private final UserCareerPackageMapper mapper;
+    public UserCareerPackageController(UserCareerPackageService userCareerPackageService) {
+        this.userCareerPackageService = userCareerPackageService;
+    }
 
     @GetMapping
     public List<UserCareerPackage> getAll() {
@@ -36,9 +35,9 @@ public class UserCareerPackageController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserCareerPackageDTO> getUserCareerPackage(@PathVariable UUID userId) {
-        UserCareerPackage entity = userCareerPackageService.getFullyLoadedPackageByUserId(userId);
-        if (entity == null) return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(mapper.toDto(entity));
+        UserCareerPackageDTO userCareerPackage = userCareerPackageService.getFullyLoadedPackage(userId);
+        if (userCareerPackage == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(userCareerPackage);
     }
 
 
