@@ -29,7 +29,6 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "title", target = "title")
     @Mapping(source = "type", target = "type")
     @Mapping(source = "instructions", target = "instructions")
-    @Mapping(source = "requirements", target = "requirements")
     @Mapping(source = "fields", target = "fields")
 
     SectionTemplateDTO toDto(SectionTemplate section);
@@ -67,7 +66,6 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "title", target = "title")
     @Mapping(source = "type", target = "type")
     @Mapping(source = "instructions", target = "instructions")
-    @Mapping(source = "requirements", target = "requirements")
     @Mapping(source = "fields", target = "fields")
     SectionTemplate toEntity(SectionTemplateDTO section);
 

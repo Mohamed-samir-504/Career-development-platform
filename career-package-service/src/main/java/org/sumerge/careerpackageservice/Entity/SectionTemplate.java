@@ -26,9 +26,6 @@ public class SectionTemplate {
 
     @Column(columnDefinition = "TEXT")
     private String instructions;
-    @Column(columnDefinition = "TEXT")
-    private String requirements;
-
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

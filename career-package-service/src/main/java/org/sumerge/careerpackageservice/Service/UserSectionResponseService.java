@@ -76,23 +76,38 @@ public class UserSectionResponseService {
         UserSectionResponse sectionResponse = sectionResponseRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Section response not found"));
 
-        // Map each UserFieldResponseId with its UserFieldResponse
+        //map existing responses by ID
         Map<UUID, UserFieldResponse> existingResponsesById = sectionResponse.getFieldResponses().stream()
                 .filter(r -> r.getId() != null)
                 .collect(Collectors.toMap(UserFieldResponse::getId, r -> r));
 
-        for (UserFieldResponseDTO userFieldResponseDTO : request.getFieldResponses()) {
-            UUID userFieldResponseId = userFieldResponseDTO.getId();
 
-            UserFieldResponse existingResponse = existingResponsesById.get(userFieldResponseId);
-            if (existingResponse != null) {
-                existingResponse.setValue(userFieldResponseDTO.getValue());
+        for (UserFieldResponseDTO userFieldResponseDTO : request.getFieldResponses()) {
+            UUID fieldResponseId = userFieldResponseDTO.getId();
+            UserFieldResponse existing = existingResponsesById.get(fieldResponseId);
+            if (existing != null) {
+                existing.setValue(userFieldResponseDTO.getValue());
             } else {
-                throw new RuntimeException("Field response with ID " + userFieldResponseId + " not found in this section");
+                throw new RuntimeException("Field response with ID " + fieldResponseId + " not found in this section");
+            }
+        }
+
+        //handle new fields when updating
+        if (request.getNewFieldResponses() != null) {
+            for (UserFieldResponseDTO newUserField : request.getNewFieldResponses()) {
+                SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(newUserField.getFieldTemplateId())
+                        .orElseThrow(() -> new RuntimeException("Field template not found"));
+                UserFieldResponse newResponse = new UserFieldResponse(
+                        fieldTemplate,
+                        newUserField.getValue()
+                );
+
+                sectionResponse.getFieldResponses().add(newResponse);
             }
         }
 
         return sectionResponseRepo.save(sectionResponse);
     }
+
 
 }

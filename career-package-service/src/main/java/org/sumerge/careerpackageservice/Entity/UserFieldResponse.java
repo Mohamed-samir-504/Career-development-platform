@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ public class UserFieldResponse {
 
     @ManyToOne
     @JoinColumn(name = "field_template_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private SectionFieldTemplate fieldTemplate;
 
 }
