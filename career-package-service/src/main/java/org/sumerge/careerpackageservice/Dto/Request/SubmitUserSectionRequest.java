@@ -11,4 +11,5 @@ public class SubmitUserSectionRequest {
     private UUID userCareerPackageId;
     private UUID sectionTemplateId;
     private List<UserFieldResponseDTO> fieldResponses;
+    private List<UserFieldResponseDTO> newFieldResponses;
 }

@@ -53,7 +53,9 @@ public class UserCareerPackageService {
 
     @Transactional(readOnly = true)
     public UserCareerPackage getFullyLoadedPackageByUserId(UUID userId) {
-        UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserIdAndStatus(userId, PackageStatus.IN_PROGRESS);
+
+        List<PackageStatus> statusList = List.of(PackageStatus.UNDER_REVIEW, PackageStatus.REJECTED, PackageStatus.IN_PROGRESS, PackageStatus.APPROVED);
+        UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserIdAndStatusIn(userId, statusList);
 
         if (userCareerPackage == null) return null;
 
@@ -91,7 +93,7 @@ public class UserCareerPackageService {
         SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
                 userCareerPackage.getUserId(),
                 userCareerPackage.getReviewerId(),
-                "An Employee has submitted his career package for review",
+                "Employee submitted his career package for review",
                 "SUBMISSION"
         );
         try {
@@ -108,11 +110,11 @@ public class UserCareerPackageService {
         String type = "";
 
         if (userCareerPackage.getStatus() == PackageStatus.APPROVED) {
-            message = "Your manager has approved your career package submission";
+            message = "Manager approved your career package submission";
             type = "APPROVAL";
         }
         else if (userCareerPackage.getStatus() == PackageStatus.REJECTED) {
-            message = "Your manager has rejected your career package submission";
+            message = "Manager rejected your career package submission";
             type = "REJECTION";
         }
 

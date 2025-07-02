@@ -90,7 +90,7 @@ public class CareerPackageTemplateService {
                     section.setTitle(sectionTemplateDTO.getTitle());
                     section.setType(sectionTemplateDTO.getType());
                     section.setInstructions(sectionTemplateDTO.getInstructions());
-                    section.setRequirements(sectionTemplateDTO.getRequirements());
+
 
                     sectionTemplateRepository.save(section);
                 });
