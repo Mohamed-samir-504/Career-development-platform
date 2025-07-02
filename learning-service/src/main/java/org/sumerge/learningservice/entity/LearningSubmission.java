@@ -2,6 +2,7 @@ package org.sumerge.learningservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.sumerge.learningservice.enums.SubmissionStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,11 @@ public class LearningSubmission {
 
     private UUID userId;
 
+    private UUID managerId;
+
+    @Enumerated(EnumType.STRING)
+    private SubmissionStatus status;
+
     @ManyToOne
     @JoinColumn(name = "template_id")
     private LearningMaterialTemplate template;
@@ -34,5 +40,6 @@ public class LearningSubmission {
     @PrePersist
     public void onCreate() {
         submittedAt = LocalDateTime.now();
+        status = SubmissionStatus.PENDING;
     }
 }
