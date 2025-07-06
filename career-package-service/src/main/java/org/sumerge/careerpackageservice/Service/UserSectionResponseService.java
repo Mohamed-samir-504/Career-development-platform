@@ -58,7 +58,7 @@ public class UserSectionResponseService {
         UserSectionSubmission sectionResponse = new UserSectionSubmission();
         sectionResponse.setSectionTemplate(sectionTemplate);
 
-        List<UserFieldSubmission> responses = request.getFieldResponses().stream().map(userFieldResponseDTO -> {
+        List<UserFieldSubmission> responses = request.getFieldSubmissions().stream().map(userFieldResponseDTO -> {
             SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
                     .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
 
@@ -68,8 +68,8 @@ public class UserSectionResponseService {
             );
         }).toList();
 
-        sectionResponse.setFieldResponses(responses);
-        userCareerPackage.getSectionResponses().add(sectionResponse);
+        sectionResponse.setFieldSubmissions(responses);
+        userCareerPackage.getSectionSubmissions().add(sectionResponse);
         return sectionResponseRepo.save(sectionResponse);
     }
 
@@ -78,12 +78,12 @@ public class UserSectionResponseService {
                 .orElseThrow(() -> new EntityNotFoundException("Section response not found"));
 
         //map existing responses by ID
-        Map<UUID, UserFieldSubmission> existingResponsesById = sectionResponse.getFieldResponses().stream()
+        Map<UUID, UserFieldSubmission> existingResponsesById = sectionResponse.getFieldSubmissions().stream()
                 .filter(r -> r.getId() != null)
                 .collect(Collectors.toMap(UserFieldSubmission::getId, r -> r));
 
 
-        for (UserFieldSubmissionDTO userFieldSubmissionDTO : request.getFieldResponses()) {
+        for (UserFieldSubmissionDTO userFieldSubmissionDTO : request.getFieldSubmissions()) {
             UUID fieldResponseId = userFieldSubmissionDTO.getId();
             UserFieldSubmission existing = existingResponsesById.get(fieldResponseId);
             if (existing != null) {
@@ -94,8 +94,8 @@ public class UserSectionResponseService {
         }
 
         //handle new fields when updating
-        if (request.getNewFieldResponses() != null) {
-            for (UserFieldSubmissionDTO newUserField : request.getNewFieldResponses()) {
+        if (request.getNewFieldSubmissions() != null) {
+            for (UserFieldSubmissionDTO newUserField : request.getNewFieldSubmissions()) {
                 SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(newUserField.getFieldTemplateId())
                         .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
                 UserFieldSubmission newResponse = new UserFieldSubmission(
@@ -103,7 +103,7 @@ public class UserSectionResponseService {
                         newUserField.getValue()
                 );
 
-                sectionResponse.getFieldResponses().add(newResponse);
+                sectionResponse.getFieldSubmissions().add(newResponse);
             }
         }
 

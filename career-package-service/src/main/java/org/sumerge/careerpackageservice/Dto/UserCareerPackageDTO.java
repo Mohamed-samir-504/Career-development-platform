@@ -12,7 +12,7 @@ public class UserCareerPackageDTO {
     private UUID userId;
     private UUID reviewerId;
     private CareerPackageTemplateDTO template;
-    private List<UserSectionSubmissionDTO> sectionResponses;
+    private List<UserSectionSubmissionDTO> sectionSubmissions;
     private PackageStatus status;
     private String reviewerComment;
 }
