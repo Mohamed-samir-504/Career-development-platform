@@ -25,6 +25,9 @@ public class LearningMaterialTemplate {
     @Column(nullable = false)
     private int points;
 
+    @Column(nullable = false)
+    private UUID careerPackageId;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 

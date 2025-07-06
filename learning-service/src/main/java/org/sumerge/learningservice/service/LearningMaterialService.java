@@ -46,5 +46,12 @@ public class LearningMaterialService {
     }
 
 
+    public List<LearningMaterialTemplateDTO> getTemplateByCareerPackageId(UUID careerPackageId) {
+        return templateRepository.findByCareerPackageId(careerPackageId)
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
 

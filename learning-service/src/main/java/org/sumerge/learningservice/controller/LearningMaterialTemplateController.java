@@ -30,5 +30,10 @@ public class LearningMaterialTemplateController {
     public ResponseEntity<LearningMaterialTemplateDTO> getTemplateById(@PathVariable UUID id) {
         return ResponseEntity.ok(materialService.getTemplateById(id));
     }
+
+    @GetMapping("/career-package/{careerPackageId}")
+    public ResponseEntity<List<LearningMaterialTemplateDTO>> getTemplateByCareerPackageID(@PathVariable UUID careerPackageId) {
+        return ResponseEntity.ok(materialService.getTemplateByCareerPackageId(careerPackageId));
+    }
 }
 

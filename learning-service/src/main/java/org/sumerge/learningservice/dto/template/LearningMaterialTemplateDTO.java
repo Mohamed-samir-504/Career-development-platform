@@ -11,6 +11,7 @@ import java.util.UUID;
 @Builder
 public class LearningMaterialTemplateDTO {
     private UUID id;
+    private UUID careerPackageId;
     private String title;
     private String description;
     private int points;
