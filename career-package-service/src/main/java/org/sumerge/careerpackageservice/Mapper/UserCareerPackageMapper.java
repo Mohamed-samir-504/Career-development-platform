@@ -43,12 +43,12 @@ public interface UserCareerPackageMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "sectionTemplate.id", target = "sectionTemplateId")
     @Mapping(source = "fieldResponses", target = "fieldResponses")
-    UserSectionResponseDTO toDto(UserSectionResponse response);
+    UserSectionSubmissionDTO toDto(UserSectionSubmission response);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "fieldTemplate.id", target = "fieldTemplateId")
     @Mapping(source = "value", target = "value")
-    UserFieldResponseDTO toDto(UserFieldResponse response);
+    UserFieldSubmissionDTO toDto(UserFieldSubmission response);
 
     List<CareerPackageTemplateDTO> toCareerPackageDtoList(List<CareerPackageTemplate> templates);
 
@@ -56,9 +56,9 @@ public interface UserCareerPackageMapper {
 
     List<SectionFieldTemplateDTO> toFieldDtoList(List<SectionFieldTemplate> fields);
 
-    List<UserSectionResponseDTO> toSectionResponseDtoList(List<UserSectionResponse> responses);
+    List<UserSectionSubmissionDTO> toSectionResponseDtoList(List<UserSectionSubmission> responses);
 
-    List<UserFieldResponseDTO> toFieldResponseDtoList(List<UserFieldResponse> responses);
+    List<UserFieldSubmissionDTO> toFieldResponseDtoList(List<UserFieldSubmission> responses);
 
 
 

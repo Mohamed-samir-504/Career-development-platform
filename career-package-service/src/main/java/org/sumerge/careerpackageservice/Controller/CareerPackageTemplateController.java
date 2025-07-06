@@ -6,7 +6,6 @@ import org.sumerge.careerpackageservice.Dto.CareerPackageTemplateDTO;
 import org.sumerge.careerpackageservice.Dto.Request.CareerPackageEditRequest;
 import org.sumerge.careerpackageservice.Dto.Request.CreateCareerPackageRequest;
 import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
-import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Service.CareerPackageTemplateService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,23 +14,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/career-package-template")
+@RequestMapping("/career-package-template")
 public class CareerPackageTemplateController {
 
-
     private final CareerPackageTemplateService careerPackageTemplateService;
-    private final UserCareerPackageMapper mapper;
 
-    public CareerPackageTemplateController(CareerPackageTemplateService careerPackageTemplateService, UserCareerPackageMapper mapper) {
+    public CareerPackageTemplateController(CareerPackageTemplateService careerPackageTemplateService) {
         this.careerPackageTemplateService = careerPackageTemplateService;
-        this.mapper = mapper;
+
     }
 
     @GetMapping
     public ResponseEntity<List<CareerPackageTemplateDTO>> getAll() {
 
-        List<CareerPackageTemplate> entityList = careerPackageTemplateService.getAll();
-        return ResponseEntity.ok(mapper.toCareerPackageDtoList(entityList));
+        List<CareerPackageTemplateDTO> templateList = careerPackageTemplateService.getAll();
+        return ResponseEntity.ok(templateList);
     }
 
     @GetMapping("/{id}")

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class UserSectionResponseDTO {
+public class UserSectionSubmissionDTO {
     private UUID id;
     private UUID sectionTemplateId;
-    private List<UserFieldResponseDTO> fieldResponses;
+    private List<UserFieldSubmissionDTO> fieldResponses;
 }

@@ -10,6 +10,7 @@ import org.sumerge.careerpackageservice.Dto.UserCareerPackageDTO;
 import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
+import org.sumerge.careerpackageservice.Exception.KafkaPublishException;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Repository.CareerPackageTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;
@@ -52,29 +53,28 @@ public class UserCareerPackageService {
     }
 
     @Transactional(readOnly = true)
-    public UserCareerPackage getFullyLoadedPackageByUserId(UUID userId) {
+    public UserCareerPackageDTO getFullyLoadedPackage(UUID userId) {
 
         List<PackageStatus> statusList = List.of(PackageStatus.UNDER_REVIEW, PackageStatus.REJECTED, PackageStatus.IN_PROGRESS, PackageStatus.APPROVED);
         UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserIdAndStatusIn(userId, statusList);
 
-        if (userCareerPackage == null) return null;
+        if (userCareerPackage == null) throw new EntityNotFoundException("No career package found for user: " + userId);;
 
-        // Force fetch template and all sections + fields
+
         userCareerPackage.getTemplate().getSections().forEach(section -> {
-            section.getFields().size(); // triggers fetch
+            section.getFields().size(); //triggers fetch
         });
 
-        // Force fetch user responses and nested field responses
         userCareerPackage.getSectionResponses().forEach(response -> {
-            response.getFieldResponses().size(); // triggers fetch
+            response.getFieldResponses().size();
         });
 
-        return userCareerPackage;
+        return mapper.toDto(userCareerPackage);
     }
 
     public UserCareerPackage updateUserCareerPackage(UUID id, UserCareerPackage request) {
         UserCareerPackage userCareerPackage = userCareerPackageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Career package not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Career package not found"));
 
         userCareerPackage.setStatus(PackageStatus.valueOf(String.valueOf(request.getStatus())));
         userCareerPackage.setReviewerComment(String.valueOf(request.getReviewerComment()));
@@ -100,7 +100,7 @@ public class UserCareerPackageService {
             kafkaTemplate.send("career-package-submitted", sendNotificationRequest);
         } catch (Exception e) {
 
-            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
+            throw new KafkaPublishException("Failed to send message to Kafka", e);
         }
     }
 
@@ -128,7 +128,7 @@ public class UserCareerPackageService {
             kafkaTemplate.send("career-package-submitted", sendNotificationRequest);
         } catch (Exception e) {
 
-            throw new RuntimeException("Failed to send message to Kafka: " + e.getMessage(), e);
+            throw new KafkaPublishException("Failed to send message to Kafka", e);
         }
     }
 
