@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/learning/files")
+@RequestMapping("/files")
 @RequiredArgsConstructor
 public class LearningDocumentController {
 
