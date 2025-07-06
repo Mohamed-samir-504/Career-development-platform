@@ -8,5 +8,5 @@ import java.util.UUID;
 public class UserSectionSubmissionDTO {
     private UUID id;
     private UUID sectionTemplateId;
-    private List<UserFieldSubmissionDTO> fieldResponses;
+    private List<UserFieldSubmissionDTO> fieldSubmissions;
 }

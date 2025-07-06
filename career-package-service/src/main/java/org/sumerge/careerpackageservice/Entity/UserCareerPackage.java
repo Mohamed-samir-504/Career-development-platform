@@ -44,5 +44,5 @@ public class UserCareerPackage {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_career_package_id")
-    private List<UserSectionSubmission> sectionResponses;
+    private List<UserSectionSubmission> sectionSubmissions;
 }

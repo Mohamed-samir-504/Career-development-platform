@@ -65,8 +65,8 @@ public class UserCareerPackageService {
             section.getFields().size(); //triggers fetch
         });
 
-        userCareerPackage.getSectionResponses().forEach(response -> {
-            response.getFieldResponses().size();
+        userCareerPackage.getSectionSubmissions().forEach(response -> {
+            response.getFieldSubmissions().size();
         });
 
         return mapper.toDto(userCareerPackage);

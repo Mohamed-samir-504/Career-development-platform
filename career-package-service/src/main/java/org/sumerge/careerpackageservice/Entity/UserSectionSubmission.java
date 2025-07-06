@@ -23,6 +23,6 @@ public class UserSectionSubmission {
     private SectionTemplate sectionTemplate;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "section_response_id")
-    private List<UserFieldSubmission> fieldResponses;
+    @JoinColumn(name = "section_submission_id")
+    private List<UserFieldSubmission> fieldSubmissions;
 }

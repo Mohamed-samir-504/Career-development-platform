@@ -10,6 +10,6 @@ import java.util.UUID;
 public class SubmitUserSectionRequest {
     private UUID userCareerPackageId;
     private UUID sectionTemplateId;
-    private List<UserFieldSubmissionDTO> fieldResponses;
-    private List<UserFieldSubmissionDTO> newFieldResponses;
+    private List<UserFieldSubmissionDTO> fieldSubmissions;
+    private List<UserFieldSubmissionDTO> newFieldSubmissions;
 }
