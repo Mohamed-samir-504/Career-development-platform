@@ -19,7 +19,11 @@ public class LearningMaterialTemplate {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
+    private int points;
 
     @Column(columnDefinition = "TEXT")
     private String description;
