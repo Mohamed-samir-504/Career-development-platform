@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.sumerge.learningservice.dto.SendNotificationRequest;
 import org.sumerge.learningservice.dto.submission.LearningSubmissionDTO;
 import org.sumerge.learningservice.entity.LearningMaterialTemplate;
+import org.sumerge.learningservice.entity.LearningScore;
 import org.sumerge.learningservice.entity.LearningSectionResponse;
 import org.sumerge.learningservice.entity.LearningSubmission;
 import org.sumerge.learningservice.enums.SubmissionStatus;
@@ -25,6 +26,9 @@ public class LearningSubmissionService {
     private final LearningMaterialTemplateRepository templateRepository;
     private final LearningMaterialMapper mapper;
     private final KafkaTemplate<String, SendNotificationRequest> kafkaTemplate;
+    private final LearningScoreService scoreService;
+    private final LearningMaterialService learningMaterialService;
+    private final LearningScoreService learningScoreService;
 
     public List<LearningSubmissionDTO> getSubmissionsByUser(UUID userId) {
         return submissionRepository.findByUserId(userId)
@@ -94,8 +98,8 @@ public class LearningSubmissionService {
         submission.setStatus(accepted ? SubmissionStatus.APPROVED : SubmissionStatus.REJECTED);
         submissionRepository.save(submission);
 
-        LearningSubmissionDTO dto = mapper.toDto(submission);
-        return dto;
+        learningScoreService.addPoints(submission.getUserId(), submission.getTemplate().getPoints());
+        return mapper.toDto(submission);
     }
 
     public void sendNotificationToManager(LearningSubmissionDTO learningSubmission) {

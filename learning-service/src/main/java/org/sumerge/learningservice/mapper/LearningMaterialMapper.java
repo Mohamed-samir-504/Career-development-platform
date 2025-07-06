@@ -17,10 +17,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface LearningMaterialMapper {
 
-    @Mapping(source = "sections", target = "sections")
     LearningMaterialTemplateDTO toDto(LearningMaterialTemplate template);
 
-    @Mapping(source = "sections", target = "sections")
     LearningMaterialTemplate toEntity(LearningMaterialTemplateDTO dto);
 
     LearningSectionTemplateDTO toDto(LearningSectionTemplate section);
@@ -50,7 +48,6 @@ public interface LearningMaterialMapper {
     @Mapping(source = "templateId", target = "template.id")
     LearningSubmission toEntity(LearningSubmissionDTO dto);
 
-    // List Mappers
     List<LearningSectionTemplateDTO> toSectionTemplateDtoList(List<LearningSectionTemplate> sections);
     List<LearningSectionTemplate> toSectionTemplateEntityList(List<LearningSectionTemplateDTO> dtos);
 
