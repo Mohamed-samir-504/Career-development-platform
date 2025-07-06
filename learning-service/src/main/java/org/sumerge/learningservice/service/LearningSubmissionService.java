@@ -33,6 +33,14 @@ public class LearningSubmissionService {
                 .collect(Collectors.toList());
     }
 
+    public LearningSubmissionDTO getByUserAndTemplate(UUID userId, UUID templateId) {
+        LearningSubmission submission = submissionRepository.findByUserIdAndTemplateId(userId, templateId)
+                .orElseThrow(() -> new RuntimeException("Submission not found"));
+
+        return mapper.toDto(submission);
+    }
+
+
     public LearningSubmissionDTO saveSubmission(LearningSubmissionDTO submissionDto) {
         LearningSubmission entity = mapper.toEntity(submissionDto);
 
@@ -54,6 +62,13 @@ public class LearningSubmissionService {
 
     public List<LearningSubmissionDTO> getSubmissionsByTemplate(UUID templateId) {
         return submissionRepository.findByTemplateId(templateId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    public List<LearningSubmissionDTO> getSubmissionsByManagerId(UUID managerId) {
+        return submissionRepository.findByManagerId(managerId)
                 .stream()
                 .map(mapper::toDto)
                 .toList();

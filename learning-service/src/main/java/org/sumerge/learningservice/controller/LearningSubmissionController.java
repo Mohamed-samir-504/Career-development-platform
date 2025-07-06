@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/learning/submissions")
+@RequestMapping("/submissions")
 @RequiredArgsConstructor
 public class LearningSubmissionController {
 
@@ -23,8 +23,6 @@ public class LearningSubmissionController {
     }
 
 
-
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<LearningSubmissionDTO>> getByUser(@PathVariable UUID userId) {
         return ResponseEntity.ok(submissionService.getSubmissionsByUser(userId));
@@ -35,12 +33,18 @@ public class LearningSubmissionController {
         return ResponseEntity.ok(submissionService.getSubmissionsByTemplate(templateId));
     }
 
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<List<LearningSubmissionDTO>> getByManagerId(@PathVariable UUID managerId) {
+        return ResponseEntity.ok(submissionService.getSubmissionsByManagerId(managerId));
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<LearningSubmissionDTO> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(submissionService.getSubmission(id));
     }
 
-    @PostMapping("/{id}/review")
+    @PutMapping("/{id}/review")
     public ResponseEntity<Void> reviewSubmission(
             @PathVariable UUID id,
             @RequestParam boolean accepted) {
@@ -53,5 +57,12 @@ public class LearningSubmissionController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         submissionService.deleteSubmission(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user/{userId}/template/{templateId}")
+    public ResponseEntity<LearningSubmissionDTO> getByUserAndTemplate(
+            @PathVariable UUID userId,
+            @PathVariable UUID templateId) {
+        return ResponseEntity.ok(submissionService.getByUserAndTemplate(userId, templateId));
     }
 }

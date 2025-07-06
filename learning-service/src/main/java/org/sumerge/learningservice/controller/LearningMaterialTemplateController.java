@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/learning/templates")
+@RequestMapping("/templates")
 @RequiredArgsConstructor
 public class LearningMaterialTemplateController {
 
