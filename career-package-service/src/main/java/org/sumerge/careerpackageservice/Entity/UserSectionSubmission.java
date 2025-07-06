@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class UserSectionResponse {
+public class UserSectionSubmission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,5 +24,5 @@ public class UserSectionResponse {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "section_response_id")
-    private List<UserFieldResponse> fieldResponses;
+    private List<UserFieldSubmission> fieldResponses;
 }

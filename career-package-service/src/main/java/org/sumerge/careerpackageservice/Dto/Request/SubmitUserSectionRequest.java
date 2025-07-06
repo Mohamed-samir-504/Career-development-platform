@@ -1,7 +1,7 @@
 package org.sumerge.careerpackageservice.Dto.Request;
 
 import lombok.Data;
-import org.sumerge.careerpackageservice.Dto.UserFieldResponseDTO;
+import org.sumerge.careerpackageservice.Dto.UserFieldSubmissionDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +10,6 @@ import java.util.UUID;
 public class SubmitUserSectionRequest {
     private UUID userCareerPackageId;
     private UUID sectionTemplateId;
-    private List<UserFieldResponseDTO> fieldResponses;
-    private List<UserFieldResponseDTO> newFieldResponses;
+    private List<UserFieldSubmissionDTO> fieldResponses;
+    private List<UserFieldSubmissionDTO> newFieldResponses;
 }

@@ -13,9 +13,9 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserFieldResponse {
+public class UserFieldSubmission {
 
-    public UserFieldResponse(SectionFieldTemplate fieldTemplate, String value) {
+    public UserFieldSubmission(SectionFieldTemplate fieldTemplate, String value) {
 
         this.fieldTemplate = fieldTemplate;
         this.value = value;

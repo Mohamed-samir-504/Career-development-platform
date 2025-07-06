@@ -3,7 +3,7 @@ package org.sumerge.careerpackageservice.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.sumerge.careerpackageservice.Dto.Request.SubmitUserSectionRequest;
-import org.sumerge.careerpackageservice.Dto.UserFieldResponseDTO;
+import org.sumerge.careerpackageservice.Dto.UserFieldSubmissionDTO;
 import org.sumerge.careerpackageservice.Entity.*;
 import org.sumerge.careerpackageservice.Repository.*;
 import org.springframework.stereotype.Service;
@@ -21,10 +21,10 @@ public class UserSectionResponseService {
     private final UserCareerPackageRepository careerPackageRepo;
     private final SectionTemplateRepository sectionTemplateRepo;
     private final SectionFieldTemplateRepository fieldTemplateRepo;
-    private final UserSectionResponseRepository sectionResponseRepo;
+    private final UserSectionSubmissionRepository sectionResponseRepo;
 
 
-    public UserSectionResponseService(UserCareerPackageRepository careerPackageRepo, SectionTemplateRepository sectionTemplateRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserSectionResponseRepository sectionResponseRepo) {
+    public UserSectionResponseService(UserCareerPackageRepository careerPackageRepo, SectionTemplateRepository sectionTemplateRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserSectionSubmissionRepository sectionResponseRepo) {
         this.careerPackageRepo = careerPackageRepo;
         this.sectionTemplateRepo = sectionTemplateRepo;
         this.fieldTemplateRepo = fieldTemplateRepo;
@@ -32,15 +32,15 @@ public class UserSectionResponseService {
 
     }
 
-    public List<UserSectionResponse> getAll() {
+    public List<UserSectionSubmission> getAll() {
         return sectionResponseRepo.findAll();
     }
 
-    public Optional<UserSectionResponse> getById(UUID id) {
+    public Optional<UserSectionSubmission> getById(UUID id) {
         return sectionResponseRepo.findById(id);
     }
 
-    public UserSectionResponse create(UserSectionResponse obj) {
+    public UserSectionSubmission create(UserSectionSubmission obj) {
         return sectionResponseRepo.save(obj);
     }
 
@@ -48,21 +48,21 @@ public class UserSectionResponseService {
         sectionResponseRepo.deleteById(id);
     }
 
-    public UserSectionResponse submitSection(SubmitUserSectionRequest request) {
+    public UserSectionSubmission submitSection(SubmitUserSectionRequest request) {
         UserCareerPackage userCareerPackage = careerPackageRepo.findById(request.getUserCareerPackageId())
                 .orElseThrow(() -> new EntityNotFoundException("Career package not found"));
 
         SectionTemplate sectionTemplate = sectionTemplateRepo.findById(request.getSectionTemplateId())
                 .orElseThrow(() -> new EntityNotFoundException("Section template not found"));
 
-        UserSectionResponse sectionResponse = new UserSectionResponse();
+        UserSectionSubmission sectionResponse = new UserSectionSubmission();
         sectionResponse.setSectionTemplate(sectionTemplate);
 
-        List<UserFieldResponse> responses = request.getFieldResponses().stream().map(userFieldResponseDTO -> {
+        List<UserFieldSubmission> responses = request.getFieldResponses().stream().map(userFieldResponseDTO -> {
             SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
                     .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
 
-            return new UserFieldResponse(
+            return new UserFieldSubmission(
                     fieldTemplate,
                     userFieldResponseDTO.getValue()
             );
@@ -73,21 +73,21 @@ public class UserSectionResponseService {
         return sectionResponseRepo.save(sectionResponse);
     }
 
-    public UserSectionResponse updateSection(UUID id, SubmitUserSectionRequest request) {
-        UserSectionResponse sectionResponse = sectionResponseRepo.findById(id)
+    public UserSectionSubmission updateSection(UUID id, SubmitUserSectionRequest request) {
+        UserSectionSubmission sectionResponse = sectionResponseRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Section response not found"));
 
         //map existing responses by ID
-        Map<UUID, UserFieldResponse> existingResponsesById = sectionResponse.getFieldResponses().stream()
+        Map<UUID, UserFieldSubmission> existingResponsesById = sectionResponse.getFieldResponses().stream()
                 .filter(r -> r.getId() != null)
-                .collect(Collectors.toMap(UserFieldResponse::getId, r -> r));
+                .collect(Collectors.toMap(UserFieldSubmission::getId, r -> r));
 
 
-        for (UserFieldResponseDTO userFieldResponseDTO : request.getFieldResponses()) {
-            UUID fieldResponseId = userFieldResponseDTO.getId();
-            UserFieldResponse existing = existingResponsesById.get(fieldResponseId);
+        for (UserFieldSubmissionDTO userFieldSubmissionDTO : request.getFieldResponses()) {
+            UUID fieldResponseId = userFieldSubmissionDTO.getId();
+            UserFieldSubmission existing = existingResponsesById.get(fieldResponseId);
             if (existing != null) {
-                existing.setValue(userFieldResponseDTO.getValue());
+                existing.setValue(userFieldSubmissionDTO.getValue());
             } else {
                 throw new RuntimeException("Field response with ID " + fieldResponseId + " not found in this section");
             }
@@ -95,10 +95,10 @@ public class UserSectionResponseService {
 
         //handle new fields when updating
         if (request.getNewFieldResponses() != null) {
-            for (UserFieldResponseDTO newUserField : request.getNewFieldResponses()) {
+            for (UserFieldSubmissionDTO newUserField : request.getNewFieldResponses()) {
                 SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(newUserField.getFieldTemplateId())
                         .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
-                UserFieldResponse newResponse = new UserFieldResponse(
+                UserFieldSubmission newResponse = new UserFieldSubmission(
                         fieldTemplate,
                         newUserField.getValue()
                 );
