@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole())
+                .imageId(user.getImageId())
                 .managerId(user.getManager() != null ? user.getManager().getId() : null)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
