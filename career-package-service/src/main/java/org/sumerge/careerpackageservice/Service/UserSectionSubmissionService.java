@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class UserSectionResponseService {
+public class UserSectionSubmissionService {
 
 
     private final UserCareerPackageRepository careerPackageRepo;
@@ -24,7 +24,7 @@ public class UserSectionResponseService {
     private final UserSectionSubmissionRepository sectionResponseRepo;
 
 
-    public UserSectionResponseService(UserCareerPackageRepository careerPackageRepo, SectionTemplateRepository sectionTemplateRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserSectionSubmissionRepository sectionResponseRepo) {
+    public UserSectionSubmissionService(UserCareerPackageRepository careerPackageRepo, SectionTemplateRepository sectionTemplateRepo, SectionFieldTemplateRepository fieldTemplateRepo, UserSectionSubmissionRepository sectionResponseRepo) {
         this.careerPackageRepo = careerPackageRepo;
         this.sectionTemplateRepo = sectionTemplateRepo;
         this.fieldTemplateRepo = fieldTemplateRepo;
