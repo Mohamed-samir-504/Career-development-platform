@@ -1,7 +1,9 @@
 package org.sumerge.learningservice.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.sumerge.learningservice.dto.BlogWikiDTO;
 import org.sumerge.learningservice.entity.BlogWiki;
 import org.sumerge.learningservice.enums.ContentType;
 import org.sumerge.learningservice.repository.BlogWikiRepository;
@@ -48,5 +50,14 @@ public class BlogWikiService {
 
     public void delete(UUID id) {
         repository.deleteById(id);
+    }
+
+    public void update(UUID id, BlogWikiDTO dto) {
+        BlogWiki entity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("BlogWiki not found"));
+        entity.setTitle(dto.getTitle());
+        entity.setContent(dto.getContent());
+        entity.setAttachmentId(dto.getAttachmentId());
+        repository.save(entity);
     }
 }

@@ -1,16 +1,18 @@
 package org.sumerge.learningservice.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.sumerge.learningservice.dto.template.LearningMaterialTemplateDTO;
+import org.sumerge.learningservice.dto.template.LearningSectionTemplateDTO;
 import org.sumerge.learningservice.entity.LearningMaterialTemplate;
 import org.sumerge.learningservice.entity.LearningSectionTemplate;
 import org.sumerge.learningservice.mapper.LearningMaterialMapper;
 import org.sumerge.learningservice.repository.LearningMaterialTemplateRepository;
+import org.sumerge.learningservice.repository.LearningSectionResponseRepository;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +21,7 @@ public class LearningMaterialService {
 
     private final LearningMaterialTemplateRepository templateRepository;
     private final LearningMaterialMapper mapper;
+    private final LearningSectionResponseRepository learningSectionResponseRepository;
 
     public LearningMaterialTemplateDTO createTemplate(LearningMaterialTemplateDTO dto) {
         LearningMaterialTemplate template = mapper.toEntity(dto);
@@ -52,6 +55,17 @@ public class LearningMaterialService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    public void deleteById(UUID id){
+        templateRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void update(UUID id, LearningMaterialTemplateDTO dto) {
+// TODO: implement update method
+    }
+
+
 
 }
 
