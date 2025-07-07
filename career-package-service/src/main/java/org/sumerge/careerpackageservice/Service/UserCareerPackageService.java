@@ -55,7 +55,7 @@ public class UserCareerPackageService {
     @Transactional(readOnly = true)
     public UserCareerPackageDTO getFullyLoadedPackage(UUID userId) {
 
-        List<PackageStatus> statusList = List.of(PackageStatus.UNDER_REVIEW, PackageStatus.REJECTED, PackageStatus.IN_PROGRESS, PackageStatus.APPROVED);
+        List<PackageStatus> statusList = List.of(PackageStatus.UNDER_REVIEW, PackageStatus.REJECTED, PackageStatus.IN_PROGRESS);
         UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserIdAndStatusIn(userId, statusList);
 
         if (userCareerPackage == null) throw new EntityNotFoundException("No career package found for user: " + userId);;
