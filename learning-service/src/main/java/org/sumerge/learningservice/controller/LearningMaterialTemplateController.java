@@ -35,5 +35,21 @@ public class LearningMaterialTemplateController {
     public ResponseEntity<List<LearningMaterialTemplateDTO>> getTemplateByCareerPackageID(@PathVariable UUID careerPackageId) {
         return ResponseEntity.ok(materialService.getTemplateByCareerPackageId(careerPackageId));
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateTemplate(
+            @PathVariable UUID id,
+            @RequestBody LearningMaterialTemplateDTO dto
+    ) {
+        materialService.update(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @DeleteMapping("/{id}")
+    public void deleteTemplate(@PathVariable UUID id) {
+        materialService.deleteById(id);
+    }
 }
 

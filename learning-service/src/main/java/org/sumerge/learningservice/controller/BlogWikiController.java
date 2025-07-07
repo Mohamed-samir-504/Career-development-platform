@@ -43,9 +43,18 @@ public class BlogWikiController {
         return ResponseEntity.ok(service.getById(id));
     }
 
+
+
     @DeleteMapping("/entry/{id}")
     public ResponseEntity<Void> deleteEntry(@PathVariable UUID id) {
         service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody BlogWikiDTO updatedDto) {
+        service.update(id, updatedDto);
         return ResponseEntity.noContent().build();
     }
 }
