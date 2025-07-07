@@ -32,11 +32,11 @@ class CareerPackageTemplateControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
-    private CareerPackageTemplateService careerPackageTemplateService;
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private CareerPackageTemplateService careerPackageTemplateService;
 
     private UUID sampleId;
     private CareerPackageTemplateDTO sampleDto;
