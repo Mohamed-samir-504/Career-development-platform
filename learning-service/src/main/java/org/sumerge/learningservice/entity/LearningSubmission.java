@@ -2,6 +2,8 @@ package org.sumerge.learningservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.sumerge.learningservice.enums.SubmissionStatus;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class LearningSubmission {
 
     @ManyToOne
     @JoinColumn(name = "template_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private LearningMaterialTemplate template;
 
     private LocalDateTime submittedAt;

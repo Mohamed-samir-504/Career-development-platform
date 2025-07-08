@@ -60,10 +60,60 @@ public class LearningMaterialService {
         templateRepository.deleteById(id);
     }
 
-    @Transactional
     public void update(UUID id, LearningMaterialTemplateDTO dto) {
-// TODO: implement update method
+        LearningMaterialTemplate existing = templateRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Template not found with id: " + id));
+
+        existing.setTitle(dto.getTitle());
+        existing.setPoints(dto.getPoints());
+        existing.setDescription(dto.getDescription());
+        existing.setCareerPackageId(dto.getCareerPackageId());
+
+        Map<UUID, LearningSectionTemplate> existingMap = existing.getSections().stream()
+                .collect(Collectors.toMap(LearningSectionTemplate::getId, s -> s));
+
+        List<LearningSectionTemplate> patchedSections = new ArrayList<>();
+        List<LearningSectionTemplate> newSections = new ArrayList<>();
+        Set<UUID> incomingIds = new HashSet<>();
+
+        for (LearningSectionTemplateDTO sectionDTO : dto.getSections()) {
+            if (sectionDTO.getId() != null && existingMap.containsKey(sectionDTO.getId())) {
+
+                LearningSectionTemplate section = existingMap.get(sectionDTO.getId());
+                section.setTitle(sectionDTO.getTitle());
+                section.setType(sectionDTO.getType());
+                section.setInstructions(sectionDTO.getInstructions());
+                section.setContent(sectionDTO.getContent());
+                section.setRequiresSubmission(sectionDTO.isRequiresSubmission());
+                section.setAttachmentId(sectionDTO.getAttachmentId());
+                patchedSections.add(section);
+                incomingIds.add(sectionDTO.getId());
+            } else {
+                LearningSectionTemplate newSection = new LearningSectionTemplate();
+                newSection.setTitle(sectionDTO.getTitle());
+                newSection.setType(sectionDTO.getType());
+                newSection.setInstructions(sectionDTO.getInstructions());
+                newSection.setContent(sectionDTO.getContent());
+                newSection.setRequiresSubmission(sectionDTO.isRequiresSubmission());
+                newSection.setAttachmentId(sectionDTO.getAttachmentId());
+                newSection.setLearningMaterialTemplate(existing);
+                newSections.add(newSection);
+            }
+        }
+        List<LearningSectionTemplate> toRemove = existing.getSections().stream()
+                .filter(s -> !incomingIds.contains(s.getId()))
+                .filter(s -> !learningSectionResponseRepository.existsBySectionTemplateId(s.getId()))
+                .toList();
+
+        existing.getSections().removeAll(toRemove);
+        existing.getSections().clear(); // Clear and reassign to prevent Hibernate orphan issues
+        existing.getSections().addAll(patchedSections);
+        existing.getSections().addAll(newSections);
+
+        templateRepository.save(existing);
     }
+
+
 
 
 
