@@ -2,6 +2,8 @@ package org.sumerge.learningservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,10 +23,12 @@ public class LearningSectionResponse {
 
     @ManyToOne
     @JoinColumn(name = "submission_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private LearningSubmission learningSubmission;
 
     @ManyToOne
     @JoinColumn(name = "section_template_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private LearningSectionTemplate sectionTemplate;
 
 
