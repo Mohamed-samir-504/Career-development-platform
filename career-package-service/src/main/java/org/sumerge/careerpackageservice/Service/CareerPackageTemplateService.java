@@ -10,6 +10,9 @@ import org.sumerge.careerpackageservice.Dto.SectionTemplateDTO;
 import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Entity.SectionFieldTemplate;
 import org.sumerge.careerpackageservice.Entity.SectionTemplate;
+import org.sumerge.careerpackageservice.Exception.FieldNotFoundException;
+import org.sumerge.careerpackageservice.Exception.PackageNotFoundException;
+import org.sumerge.careerpackageservice.Exception.SectionNotFoundException;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Repository.CareerPackageTemplateRepository;
 import org.springframework.stereotype.Service;
@@ -63,7 +66,7 @@ public class CareerPackageTemplateService {
 
     public void syncChanges(UUID packageId, CareerPackageEditRequest request) {
         CareerPackageTemplate userCareerPackage = careerPackageTemplateRepository.findById(packageId)
-                .orElseThrow(() -> new EntityNotFoundException("Package not found"));
+                .orElseThrow(() -> new PackageNotFoundException("Package not found"));
 
         //package data
         if (request.getTitle() != null) userCareerPackage.setTitle(request.getTitle());
@@ -82,7 +85,7 @@ public class CareerPackageTemplateService {
                 .map(sectionTemplateDTO -> new AbstractMap.SimpleEntry<>(
                         sectionTemplateDTO,
                         sectionTemplateRepository.findById(sectionTemplateDTO.getId())
-                                .orElseThrow(() -> new EntityNotFoundException("Section not found"))
+                                .orElseThrow(() -> new SectionNotFoundException("Section not found"))
                 ))
                 .forEach(entry -> {
                     SectionTemplateDTO sectionTemplateDTO = entry.getKey();
@@ -101,7 +104,7 @@ public class CareerPackageTemplateService {
                 .map(sectionFieldTemplateDTO -> new AbstractMap.SimpleEntry<>(
                         sectionFieldTemplateDTO,
                         sectionFieldTemplateRepository.findById(sectionFieldTemplateDTO.getId())
-                                .orElseThrow(() -> new EntityNotFoundException("Field not found"))
+                                .orElseThrow(() -> new FieldNotFoundException("Field not found"))
                 ))
                 .forEach(entry -> {
                     SectionFieldTemplateDTO sectionFieldTemplateDTO = entry.getKey();
@@ -127,7 +130,7 @@ public class CareerPackageTemplateService {
                 .filter(sectionFieldTemplateDTO -> sectionFieldTemplateDTO.getSectionTemplateId() != null)
                 .forEach(sectionFieldTemplateDTO -> {
                     SectionTemplate section = sectionTemplateRepository.findById(sectionFieldTemplateDTO.getSectionTemplateId())
-                            .orElseThrow(() -> new EntityNotFoundException("Section not found for field"));
+                            .orElseThrow(() -> new SectionNotFoundException("Section not found for field"));
                     SectionFieldTemplate field = mapper.toEntity(sectionFieldTemplateDTO);
                     section.getFields().add(field);
                     sectionTemplateRepository.save(section);

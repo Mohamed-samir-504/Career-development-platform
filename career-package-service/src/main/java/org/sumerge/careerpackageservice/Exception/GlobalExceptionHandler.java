@@ -1,6 +1,5 @@
 package org.sumerge.careerpackageservice.Exception;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,21 +11,12 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Map<String,Object>> handleEntityNotFound(EntityNotFoundException ex) {
+    @ExceptionHandler(CareerPackageException.class)
+    public ResponseEntity<Map<String, Object>> handleCareerPackageErrors(CareerPackageException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                 "message", ex.getMessage(),
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.NOT_FOUND.value()
-        ));
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String,Object>> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                "message", ex.getMessage(),
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value()
         ));
     }
 
@@ -36,6 +26,15 @@ public class GlobalExceptionHandler {
                 "message", ex.getMessage(),
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.SERVICE_UNAVAILABLE.value()
+        ));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String,Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "message", ex.getMessage(),
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.BAD_REQUEST.value()
         ));
     }
 
