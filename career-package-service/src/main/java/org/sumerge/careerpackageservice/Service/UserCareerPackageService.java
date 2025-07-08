@@ -11,6 +11,7 @@ import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
 import org.sumerge.careerpackageservice.Exception.KafkaPublishException;
+import org.sumerge.careerpackageservice.Exception.PackageNotFoundException;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Repository.CareerPackageTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;
@@ -58,7 +59,7 @@ public class UserCareerPackageService {
         List<PackageStatus> statusList = List.of(PackageStatus.UNDER_REVIEW, PackageStatus.REJECTED, PackageStatus.IN_PROGRESS);
         UserCareerPackage userCareerPackage = userCareerPackageRepository.findByUserIdAndStatusIn(userId, statusList);
 
-        if (userCareerPackage == null) throw new EntityNotFoundException("No career package found for user: " + userId);;
+        if (userCareerPackage == null) throw new PackageNotFoundException("No career package found for user: " + userId);;
 
 
         userCareerPackage.getTemplate().getSections().forEach(section -> {
@@ -74,7 +75,7 @@ public class UserCareerPackageService {
 
     public UserCareerPackage updateUserCareerPackage(UUID id, UserCareerPackage request) {
         UserCareerPackage userCareerPackage = userCareerPackageRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Career package not found"));
+                .orElseThrow(() -> new PackageNotFoundException("Career package not found"));
 
         userCareerPackage.setStatus(PackageStatus.valueOf(String.valueOf(request.getStatus())));
         userCareerPackage.setReviewerComment(String.valueOf(request.getReviewerComment()));
@@ -134,7 +135,7 @@ public class UserCareerPackageService {
 
     public UserCareerPackageDTO assignPackage(AssignCareerPackageRequest request) {
         CareerPackageTemplate template = templateRepository.findById(request.getTemplateId())
-                .orElseThrow(() -> new EntityNotFoundException("Template not found"));
+                .orElseThrow(() -> new PackageNotFoundException("Template not found"));
 
         UserCareerPackage userCareerPackage = new UserCareerPackage(
                 request.getUserId(),
