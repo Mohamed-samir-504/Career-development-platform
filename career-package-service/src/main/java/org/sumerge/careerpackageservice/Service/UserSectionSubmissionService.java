@@ -5,6 +5,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.sumerge.careerpackageservice.Dto.Request.SubmitUserSectionRequest;
 import org.sumerge.careerpackageservice.Dto.UserFieldSubmissionDTO;
 import org.sumerge.careerpackageservice.Entity.*;
+import org.sumerge.careerpackageservice.Exception.FieldNotFoundException;
+import org.sumerge.careerpackageservice.Exception.PackageNotFoundException;
+import org.sumerge.careerpackageservice.Exception.SectionNotFoundException;
 import org.sumerge.careerpackageservice.Repository.*;
 import org.springframework.stereotype.Service;
 
@@ -50,17 +53,17 @@ public class UserSectionSubmissionService {
 
     public UserSectionSubmission submitSection(SubmitUserSectionRequest request) {
         UserCareerPackage userCareerPackage = careerPackageRepo.findById(request.getUserCareerPackageId())
-                .orElseThrow(() -> new EntityNotFoundException("Career package not found"));
+                .orElseThrow(() -> new PackageNotFoundException("Career package not found"));
 
         SectionTemplate sectionTemplate = sectionTemplateRepo.findById(request.getSectionTemplateId())
-                .orElseThrow(() -> new EntityNotFoundException("Section template not found"));
+                .orElseThrow(() -> new SectionNotFoundException("Section template not found"));
 
         UserSectionSubmission sectionResponse = new UserSectionSubmission();
         sectionResponse.setSectionTemplate(sectionTemplate);
 
         List<UserFieldSubmission> responses = request.getFieldSubmissions().stream().map(userFieldResponseDTO -> {
             SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(userFieldResponseDTO.getFieldTemplateId())
-                    .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
+                    .orElseThrow(() -> new FieldNotFoundException("Field template not found"));
 
             return new UserFieldSubmission(
                     fieldTemplate,
@@ -75,7 +78,7 @@ public class UserSectionSubmissionService {
 
     public UserSectionSubmission updateSection(UUID id, SubmitUserSectionRequest request) {
         UserSectionSubmission sectionResponse = sectionResponseRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Section response not found"));
+                .orElseThrow(() -> new SectionNotFoundException("Section response not found"));
 
         //map existing responses by ID
         Map<UUID, UserFieldSubmission> existingResponsesById = sectionResponse.getFieldSubmissions().stream()
@@ -89,7 +92,7 @@ public class UserSectionSubmissionService {
             if (existing != null) {
                 existing.setValue(userFieldSubmissionDTO.getValue());
             } else {
-                throw new RuntimeException("Field response with ID " + fieldResponseId + " not found in this section");
+                throw new FieldNotFoundException("Field response with ID " + fieldResponseId + " not found in this section");
             }
         }
 
@@ -97,7 +100,7 @@ public class UserSectionSubmissionService {
         if (request.getNewFieldSubmissions() != null) {
             for (UserFieldSubmissionDTO newUserField : request.getNewFieldSubmissions()) {
                 SectionFieldTemplate fieldTemplate = fieldTemplateRepo.findById(newUserField.getFieldTemplateId())
-                        .orElseThrow(() -> new EntityNotFoundException("Field template not found"));
+                        .orElseThrow(() -> new FieldNotFoundException("Field template not found"));
                 UserFieldSubmission newResponse = new UserFieldSubmission(
                         fieldTemplate,
                         newUserField.getValue()
