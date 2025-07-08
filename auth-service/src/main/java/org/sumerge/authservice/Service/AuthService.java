@@ -3,8 +3,8 @@ package org.sumerge.authservice.Service;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.sumerge.authservice.Model.DTO.*;
-import org.sumerge.authservice.Model.UserAccount;
+import org.sumerge.authservice.Dto.*;
+import org.sumerge.authservice.Entity.UserAccount;
 import org.sumerge.authservice.Repository.UserAccountRepository;
 import org.sumerge.shared.utils.JwtUtil;
 
@@ -61,7 +61,9 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
         String token = jwtUtil.generateToken(user.getEmail());
-        return new LoginResponse(user.getId(),user.getEmail(), token);
+        long expiresIn = jwtUtil.getExpiration();
+
+        return new LoginResponse(user.getId(),user.getEmail(), token,expiresIn);
     }
 
 }

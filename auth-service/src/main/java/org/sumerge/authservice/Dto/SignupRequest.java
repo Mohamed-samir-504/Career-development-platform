@@ -1,4 +1,4 @@
-package org.sumerge.authservice.Model.DTO;
+package org.sumerge.authservice.Dto;
 
 import lombok.Data;
 
