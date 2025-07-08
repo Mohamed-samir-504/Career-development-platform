@@ -1,5 +1,6 @@
 package org.sumerge.learningservice.config;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.sumerge.shared.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Profile("!test")
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
