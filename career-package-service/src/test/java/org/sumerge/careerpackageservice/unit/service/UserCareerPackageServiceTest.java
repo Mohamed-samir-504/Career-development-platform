@@ -1,6 +1,5 @@
 package org.sumerge.careerpackageservice.unit.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -12,6 +11,7 @@ import org.sumerge.careerpackageservice.Entity.CareerPackageTemplate;
 import org.sumerge.careerpackageservice.Entity.UserCareerPackage;
 import org.sumerge.careerpackageservice.Enums.PackageStatus;
 import org.sumerge.careerpackageservice.Exception.KafkaPublishException;
+import org.sumerge.careerpackageservice.Exception.PackageNotFoundException;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Repository.CareerPackageTemplateRepository;
 import org.sumerge.careerpackageservice.Repository.UserCareerPackageRepository;
@@ -77,7 +77,7 @@ class UserCareerPackageServiceTest {
 
         when(templateRepository.findById(templateId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> service.assignPackage(request));
+        assertThrows(PackageNotFoundException.class, () -> service.assignPackage(request));
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserCareerPackageServiceTest {
 
         when(userCareerPackageRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> service.updateUserCareerPackage(id, request));
+        assertThrows(PackageNotFoundException.class, () -> service.updateUserCareerPackage(id, request));
     }
 
     @Test

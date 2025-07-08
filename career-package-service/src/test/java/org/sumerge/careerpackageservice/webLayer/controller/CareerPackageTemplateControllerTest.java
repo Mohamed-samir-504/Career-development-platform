@@ -12,7 +12,6 @@ import org.sumerge.careerpackageservice.Dto.CareerPackageTemplateDTO;
 import org.sumerge.careerpackageservice.Dto.Request.CreateCareerPackageRequest;
 import org.sumerge.careerpackageservice.Service.CareerPackageTemplateService;
 import org.sumerge.careerpackageservice.config.TestSecurityConfig;
-import org.sumerge.shared.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;

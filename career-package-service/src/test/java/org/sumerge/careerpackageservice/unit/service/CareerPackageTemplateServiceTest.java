@@ -1,6 +1,5 @@
 package org.sumerge.careerpackageservice.unit.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -9,6 +8,7 @@ import org.sumerge.careerpackageservice.Dto.Request.CareerPackageEditRequest;
 import org.sumerge.careerpackageservice.Dto.Request.CreateCareerPackageRequest;
 import org.sumerge.careerpackageservice.Entity.*;
 import org.sumerge.careerpackageservice.Enums.SectionType;
+import org.sumerge.careerpackageservice.Exception.PackageNotFoundException;
 import org.sumerge.careerpackageservice.Mapper.UserCareerPackageMapper;
 import org.sumerge.careerpackageservice.Repository.*;
 import org.sumerge.careerpackageservice.Service.CareerPackageTemplateService;
@@ -146,7 +146,7 @@ class CareerPackageTemplateServiceTest {
 
         CareerPackageEditRequest request = new CareerPackageEditRequest();
 
-        EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+        PackageNotFoundException ex = assertThrows(PackageNotFoundException.class, () -> {
             service.syncChanges(packageId, request);
         });
 
