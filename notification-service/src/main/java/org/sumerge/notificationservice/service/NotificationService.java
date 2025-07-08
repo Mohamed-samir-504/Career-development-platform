@@ -44,7 +44,7 @@ public class NotificationService {
         notificationRepo.deleteById(notificationId);
     }
 
-    @KafkaListener(topics = "career-package-submitted", groupId = "notification-group")
+    @KafkaListener(topics = {"learning-material-submitted", "learning-submission-reviewed","career-package-submitted"}, groupId = "notification-group")
     public void consume(NotificationRequest request) {
 
         notificationRepo.save(notificationMapper.toEntity(request));
