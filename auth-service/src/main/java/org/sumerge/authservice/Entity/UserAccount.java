@@ -1,4 +1,4 @@
-package org.sumerge.authservice.Model;
+package org.sumerge.authservice.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
