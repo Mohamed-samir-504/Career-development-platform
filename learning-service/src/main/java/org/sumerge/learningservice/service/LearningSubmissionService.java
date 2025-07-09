@@ -106,7 +106,7 @@ public class LearningSubmissionService {
         SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
                 learningSubmission.getUserId(),
                 learningSubmission.getManagerId(),
-                "An Employee has submitted a learning material for review",
+                "An employee has submitted a learning material for review",
                 "SUBMISSION"
         );
         try {
@@ -121,7 +121,7 @@ public class LearningSubmissionService {
         SendNotificationRequest sendNotificationRequest = new SendNotificationRequest(
                 learningSubmission.getManagerId(),
                 learningSubmission.getUserId(),
-                "Your manager has submitted reviewed your learning material",
+                "Your manager has reviewed your learning material",
                 "SUBMISSION"
         );
         try {
