@@ -26,6 +26,13 @@ public class LearningScoreService {
                 .collect(Collectors.toList());
     }
 
+    public List<LearningScoreResponse> getAllScores() {
+        return scoreRepository.findAll().stream()
+                .map(score -> new LearningScoreResponse(score.getUserId(), score.getPoints()))
+                .collect(Collectors.toList());
+    }
+
+
     public LearningScoreResponse addPoints(UUID userId, int points) {
         LearningScore score = scoreRepository.findByUserId(userId).orElse(null);
 

@@ -23,6 +23,12 @@ public class LearningScoreController {
         return scoreService.getLeaderboard();
     }
 
+    @GetMapping("")
+    public List<LearningScoreResponse> getAll() {
+        return scoreService.getAllScores();
+    }
+
+
     @PostMapping("/add")
     public LearningScoreResponse addPoints(@RequestParam UUID userId, @RequestParam int points) {
         return scoreService.addPoints(userId, points);
